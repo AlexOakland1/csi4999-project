@@ -1,3 +1,3 @@
-##Tenative Project Name: FamPlan
+#  Tenative Project Name: FamPlan
 
-Currently, only basic HTML has been implemented.
+Currently, only basic HTML and CSS has been implemented with no backend in place to demonstrate responsive design.
