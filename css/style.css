@@ -1,5 +1,6 @@
 body {
     font-family: "DejaVu Sans", DejaVu, sans-serif;
+    color: black;
 }
 
 #login {
@@ -25,13 +26,33 @@ body {
 .col2 {
     width: 50%;
 }
+#text {
+    max-width: 70%;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="time"],
+textarea {
     width: 50%;
     box-sizing: border-box;
     outline: 2px solid black;
     border-radius: 3px;
     background-color: white;
+    padding: 5px;
+    font-family: "DejaVu Sans", DejaVu, sans-serif;
+    font-size: 13px;
+}
+input[type="time"] {
+    text-align: center;
+}
+input[type="checkbox"] {
+    outline: 2px solid black;
+    box-sizing: border-box;
+    border-radius: 1px;
     padding: 5px;
 }
 input[type="submit"] {

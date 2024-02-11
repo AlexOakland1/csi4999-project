@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Add a New Entry</h1>
+            <form id="addentryform" action="main.html">
+                <div class="row">
+                    <div class="col1">
+                        <label for="addname">Name:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" id="addname" name="addname">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="description">Description:</label>
+                    </div>
+                    <div class="col2">
+                        <textarea name="description" id="description" rows="5" cols="30"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="time">Description:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="time" id="time" name="time">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="time">Participant(s):</label>
+                    </div>
+                    <div class="col2">
+                        <input type="checkbox" id="person1" name="person1" value="George">
+                        <label for="person1"> George</label><br>
+                        <input type="checkbox" id="person2" name="person2" value="Margaret">
+                        <label for="person2"> Margaret</label><br>
+                        <input type="checkbox" id="person3" name="person3" value="Kyle">
+                        <label for="person3"> Kyle</label><br>
+                        <input type="checkbox" id="person4" name="person4" value="Hannah">
+                        <label for="person4"> Hannah</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="importance">Importance Level:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="importance" name="importance">
+                            <option value="normal">Normal</option>
+                            <option value="semiimportant">Semi-Important</option>
+                            <option value="important">Important</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+            <br>
+            <button onclick="window.location.href='main.html';">
+                Back
+            </button>
+        </div>
+    </body>
+</html>
