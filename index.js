@@ -106,18 +106,37 @@ app.post("/editmemberquery", (req, res) => {
   console.log(userdata);
   let memberid = req.body.editid.trim();
   let category = req.body.editcategory.trim();
-  let sql = `UPDATE members SET membercategory = ? WHERE memberid = ?`;
-  let query = db.query(sql, [category, memberid], (err, result) => {
-    if (err) {
-      console.log(err);
-      throw err;
-    }
-    if (result.length == 0) {
-      res.render("editmember", {data: userdata, error: 1 });
-    } else {
-      res.render("main", {data: userdata});
-    }
-  });
+  const submit = req.body.submit;
+  if(submit === "Apply"){
+    let sql = `UPDATE members SET membercategory = ? WHERE memberid = ?`;
+    let query = db.query(sql, [category, memberid], (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      if (result.length == 0) {
+        res.render("editmember", {data: userdata, error: 1 });
+      } else {
+        res.render("main", {data: userdata});
+      }
+    });
+  } else if(submit === "Delete"){
+    let sql = `DELETE FROM members WHERE memberid = ?`;
+    let query = db.query(sql, memberid, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      if (result.length == 0) {
+        res.render("editmember", {data: userdata, error: 1 });
+      } else {
+        res.render("main", {data: userdata});
+      }
+    });
+  } else {
+    console.log("something's amiss...")
+    res.render("editmember", {data: userdata, error: 1 });
+  }
 });
 
 // routes for displaying more pages
