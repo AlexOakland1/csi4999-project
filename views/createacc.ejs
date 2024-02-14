@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
         <div id="login">
             <h1>Create Your Account</h1>
-            <form id="loginform" action="main.html">
+            <form id="loginform" action="/createaccount" method="post">
                 <div class="row">
                     <div class="col1">
                         <label for="username">Username:</label>
@@ -35,7 +35,10 @@
                 <input type="submit" value="Create Account">
             </form>
             <br>
-            <button onclick="window.location.href='index.html';">
+            <% if (error == 1) { %>
+                <p> Account invalid. Make sure all fields are filled in correctly.</p>
+            <%}%>
+            <button onclick="window.location.href='/';">
                 Back
             </button>
         </div>

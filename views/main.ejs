@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <h1> Placeholder </h1>
+        <p>Welcome, <%= data.name %>!</p>
+        <button onclick="window.location.href='/';">
+            log out
+        </button><br><br>
+        <form action="/addmember" method="post">
+            <input type="hidden" name="userid" value="<%= data.userid %>">
+            <input type="hidden" name="username" value="<%= data.username %>">
+            <input type="hidden" name="name" value="<%= data.name %>">
+            <button type="submit">Add Member</button>
+        </form>
+        <form action="/editmember" method="post">
+            <input type="hidden" name="userid" value="<%= data.userid %>">
+            <input type="hidden" name="username" value="<%= data.username %>">
+            <input type="hidden" name="name" value="<%= data.name %>">
+            <button type="submit">Edit Member</button>
+        </form><br><br>
+        <button onclick="window.location.href='addentry.html';">
+            add entry
+        </button>
+        <button onclick="window.location.href='editentry.html';">
+            edit entry
+        </button>
+        <button onclick="window.location.href='deleteentry.html';">
+            delete entry
+        </button>
+    </body>
+</html>

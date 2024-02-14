@@ -2,12 +2,14 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../public/css/style.css">
+        <title>Welcome to FamPlan</title>
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     </head>
     <body>
         <div id="login">
             <h1>Welcome to FamPlan</h1>
-            <form id="loginform" action="main.html">
+            <form id="loginform" action="/loginaccount" method="post">
                 <div class="row">
                     <div class="col1">
                         <label for="username">Username:</label>
@@ -26,8 +28,11 @@
                 </div>
                 <input type="submit" value="Submit">
             </form>
+            <% if (error == 1) { %>
+                <p> Login failed. Check to make sure your login info is correct.</p>
+            <%}%>
             <br>
-            <button onclick="window.location.href='createacc.html';">
+            <button onclick="window.location.href='createacc';">
                 Don't have an account? Create one today!
             </button>
         </div>

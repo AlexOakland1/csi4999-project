@@ -1,0 +1,16 @@
+{
+  "name": "csi4999-project",
+  "version": "1.0.0",
+  "description": "Currently, only basic HTML and CSS has been implemented with no backend in place to demonstrate responsive design.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
+  }
+}

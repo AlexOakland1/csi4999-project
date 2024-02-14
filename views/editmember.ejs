@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Edit Family Member or Friend</h1>
+            <p>Welcome, <%= data.name %>!</p>
+            <form id="editmemberform" action="/editmemberquery" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="editid">Select Person:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="editid" name="editid">
+                            <%members.forEach((item)=>{%>
+                                <option value="<%=item.memberid%>"> <%=item.membername%> </option>
+                            <%});%>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="editcategory">Relation Status:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="editcategory" name="editcategory">
+                            <option value="spouse">Spouse</option>
+                            <option value="child">Child</option>
+                            <option value="other">Other Family Member</option>
+                            <option value="friend">Friend</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="submit" value="Submit">
+            </form>
+            <br>
+            <form action="/main" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+            <input type="submit" value="Back">
+        </div>
+    </body>
+</html>

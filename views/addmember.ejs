@@ -2,12 +2,13 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
         <div id="login">
             <h1>Add Family Member or Friend</h1>
-            <form id="addmemberform" action="main.html">
+            <p>Welcome, <%= data.name %>!</p>
+            <form id="addmemberform" action="/addmemberquery" method="post">
                 <div class="row">
                     <div class="col1">
                         <label for="addname">Name:</label>
@@ -24,17 +25,23 @@
                         <select id="addcategory" name="addcategory">
                             <option value="spouse">Spouse</option>
                             <option value="child">Child</option>
-                            <option value="other Family Member">Other Family Member</option>
+                            <option value="other">Other Family Member</option>
                             <option value="friend">Friend</option>
                         </select>
                     </div>
                 </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
                 <input type="submit" value="Submit">
             </form>
             <br>
-            <button onclick="window.location.href='main.html';">
-                Back
-            </button>
+            <form action="/main" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+            <input type="submit" value="Back">
+            </form>
         </div>
     </body>
 </html>
