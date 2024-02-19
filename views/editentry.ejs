@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Edit Existing Entry</h1>
+            <% const selectedMembers = eventMembers.map(member => member.memberid); %>
+            <form id="editentryform" action="/editeventquery" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="eventname">Name:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" id="eventname" name="eventname" value="<%= events[0].eventname %>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="description">Description:</label>
+                    </div>
+                    <div class="col2">
+                        <textarea name="description" id="description" rows="5" cols="30"><%= events[0].eventdesc %></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="time">Date and Time:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="datetime-local" id="time" name="time" value="<%= events[0].eventdatetime.toISOString().slice(0, -1) %>">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col1">
+                        <label for="person">Participant(s):</label>
+                    </div>
+                    <div class="col2">
+                        <% memberDetails.forEach((item) => { %>
+                            <input type="checkbox" id="person" name="person" value="<%= item.memberid %>" <% if(selectedMembers.includes(item.memberid)) { %> checked <% } %>>
+                            <label for="person"> <%= item.membername %> </label>
+                        <% }); %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="importance">Importance Level:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="importance" name="importance">
+                            <option value="normal" <% if(events[0].eventimportance === 'normal') { %> selected <% } %>>Normal</option>
+                            <option value="low" <% if(events[0].eventimportance === 'low') { %> selected <% } %>>Low</option>
+                            <option value="important" <% if(events[0].eventimportance === 'important') { %> selected <% } %>>Important</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="eventid" value="<%= events[0].eventid %>">
+                <input type="submit" value="Submit">
+            </form>
+            <br>
+            <form action="/selectentry" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="submit" value="Back">
+            </form>
+        </div>
+    </body>
+</html>

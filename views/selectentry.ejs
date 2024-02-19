@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Select an Event to Edit/Delete</h1>
+            <p>Welcome, <%= data.name %>!</p>
+            <p>This page is probably temporary.</p>
+            <form id="selecteventforum" action="/selecteventquery" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="editid">Select Event:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="editid" name="editid">
+                            <%events.forEach((item)=>{%>
+                                <option value="<%=item.eventid%>"> <%=item.eventname%> </option>
+                            <%});%>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="submit" value="Edit" name="submit">
+                <input type="submit" value="Delete" name="submit">
+            </form>
+            <br>
+            <form action="/main" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+            <input type="submit" value="Back">
+        </div>
+    </body>
+</html>

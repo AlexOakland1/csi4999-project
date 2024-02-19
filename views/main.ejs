@@ -20,17 +20,19 @@
             <input type="hidden" name="userid" value="<%= data.userid %>">
             <input type="hidden" name="username" value="<%= data.username %>">
             <input type="hidden" name="name" value="<%= data.name %>">
-            <button type="submit">Edit Member</button>
-        </form><br><br>
-        <p>nonfunctional</p>
-        <button onclick="window.location.href='addentry.html';">
-            add entry
-        </button>
-        <button onclick="window.location.href='editentry.html';">
-            edit entry
-        </button>
-        <button onclick="window.location.href='deleteentry.html';">
-            delete entry
-        </button>
+            <button type="submit">Edit/Delete Member</button>
+        </form><br>
+        <form action="/addentry" method="post">
+            <input type="hidden" name="userid" value="<%= data.userid %>">
+            <input type="hidden" name="username" value="<%= data.username %>">
+            <input type="hidden" name="name" value="<%= data.name %>">
+            <button type="submit">Add Event</button>
+        </form><br>
+        <form action="/selectentry" method="post">
+            <input type="hidden" name="userid" value="<%= data.userid %>">
+            <input type="hidden" name="username" value="<%= data.username %>">
+            <input type="hidden" name="name" value="<%= data.name %>">
+            <button type="submit">Edit/Delete Event</button>
+        </form>
     </body>
 </html>

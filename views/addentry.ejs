@@ -2,18 +2,18 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
         <div id="login">
-            <h1>Edit Existing Entry</h1>
-            <form id="editentryform" action="main.html">
+            <h1>Add a New Entry</h1>
+            <form id="addentryform" action="/addeventquery" method="post">
                 <div class="row">
                     <div class="col1">
-                        <label for="addname">Name:</label>
+                        <label for="eventname">Name:</label>
                     </div>
                     <div class="col2">
-                        <input type="text" id="addname" name="addname">
+                        <input type="text" id="eventname" name="eventname">
                     </div>
                 </div>
                 <div class="row">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="row">
                     <div class="col1">
-                        <label for="time">Description:</label>
+                        <label for="time">Time:</label>
                     </div>
                     <div class="col2">
                         <input type="time" id="time" name="time">
@@ -34,17 +34,13 @@
                 </div>
                 <div class="row">
                     <div class="col1">
-                        <label for="time">Participant(s):</label>
+                        <label for="person">Participant(s):</label>
                     </div>
                     <div class="col2">
-                        <input type="checkbox" id="person1" name="person1" value="George">
-                        <label for="person1"> George</label><br>
-                        <input type="checkbox" id="person2" name="person2" value="Margaret">
-                        <label for="person2"> Margaret</label><br>
-                        <input type="checkbox" id="person3" name="person3" value="Kyle">
-                        <label for="person3"> Kyle</label><br>
-                        <input type="checkbox" id="person4" name="person4" value="Hannah">
-                        <label for="person4"> Hannah</label>
+                        <%members.forEach((item)=>{%>
+                            <input type="checkbox" id="person" name="person" value="<%= item.memberid %>">
+                            <label for="person"> <%= item.membername %> </label>
+                        <%});%>
                     </div>
                 </div>
                 <div class="row">
@@ -54,17 +50,22 @@
                     <div class="col2">
                         <select id="importance" name="importance">
                             <option value="normal">Normal</option>
-                            <option value="semiimportant">Semi-Important</option>
+                            <option value="low">Low</option>
                             <option value="important">Important</option>
                         </select>
                     </div>
                 </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
                 <input type="submit" value="Submit">
             </form>
             <br>
-            <button onclick="window.location.href='main.html';">
-                Back
-            </button>
+            <form action="/main" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+            <input type="submit" value="Back">
         </div>
     </body>
 </html>
