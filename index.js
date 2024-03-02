@@ -51,8 +51,14 @@ app.post("/createaccount", (req, res) => {
     } else {
       // pass user login data
       const selectName = `SELECT userid, username, name FROM users WHERE password = ?`;
+      const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+      const selectMembers = `SELECT * FROM members WHERE userid = ?`;
       db.query(selectName, pass, (err, userdata) => {
-          res.render("main", {data: userdata[0]});
+        db.query(selectEvents, userdata[0].userid, (err, eventlist) => {
+          db.query(selectMembers, userdata[0].userid, (err, memberlist) => {
+            res.render("main", {data: userdata[0], events: eventlist, members: memberlist, fullevents: eventlist});
+          });
+        });
       });
     }
   });
@@ -72,8 +78,14 @@ app.post("/loginaccount", (req, res) => {
     } else {
       // pass user login data
       const selectName = `SELECT userid, username, name FROM users WHERE password = ?`;
+      const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+      const selectMembers = `SELECT * FROM members WHERE userid = ?`;
       db.query(selectName, pass, (err, userdata) => {
-          res.render("main", {data: userdata[0]});
+        db.query(selectEvents, userdata[0].userid, (err, eventlist) => {
+          db.query(selectMembers, userdata[0].userid, (err, memberlist) => {
+            res.render("main", {data: userdata[0], events: eventlist, members: memberlist, fullevents: eventlist});
+          });
+        });
       });
     }
   });
@@ -86,6 +98,8 @@ app.post("/addmemberquery", (req, res) => {
   console.log(userdata);
   let addmemberdata = { memberid: "0", userid: req.body.userid.trim(), membername: req.body.addname.trim(), membercategory: req.body.addcategory.trim() };
   let sql = `INSERT INTO members SET ?`;
+  const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+  const selectMembers = `SELECT * FROM members WHERE userid = ?`;
   let query = db.query(sql, addmemberdata, (err, result) => {
     if (err) {
       console.log(err);
@@ -94,7 +108,11 @@ app.post("/addmemberquery", (req, res) => {
     if (result.length == 0) {
       res.render("addmember", {data: userdata, error: 1 });
     } else {
-      res.render("main", {data: userdata});
+      db.query(selectEvents, userdata.userid, (err, eventlist) => {
+        db.query(selectMembers, userdata.userid, (err, memberlist) => {
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+        });
+      });
     }
   });
 });
@@ -106,14 +124,13 @@ app.post("/addeventquery", (req, res) => {
   console.log(userdata);
   let selectedPersons = req.body.person;
   console.log(selectedPersons);
-  let today = new Date().toISOString().slice(0, 10)
-  const time = today + " " + req.body.time.trim() + ":00";
-  console.log(time);
-  let addeventdata = { eventname: req.body.eventname.trim(), eventdesc: req.body.description.trim(), eventdatetime: time, eventimportance: req.body.importance.trim(), userid: req.body.userid.trim() };
-  let geteventdata = { eventname: req.body.eventname.trim(), eventdesc: req.body.description.trim(), eventdatetime: time, eventimportance: req.body.importance.trim(), userid: req.body.userid.trim() };
+  let addeventdata = { eventname: req.body.eventname.trim(), eventdesc: req.body.description.trim(), eventdatetime: req.body.time.trim(), eventimportance: req.body.importance.trim(), userid: req.body.userid.trim(), location: req.body.location.trim() };
+  let geteventdata = { eventname: req.body.eventname.trim(), eventdesc: req.body.description.trim(), eventdatetime: req.body.time.trim(), eventimportance: req.body.importance.trim(), userid: req.body.userid.trim(), location: req.body.location.trim() };
   let sql = `INSERT INTO events SET ?`;
-  let sql2 = `SELECT eventid FROM events WHERE eventname = ? AND eventdesc = ? AND eventdatetime = ? AND eventimportance = ? AND userid = ?`;
+  let sql2 = `SELECT eventid FROM events WHERE eventname = ? AND eventdesc = ? AND eventdatetime = ? AND eventimportance = ? AND userid = ? AND location = ?`;
   let sql3 = `INSERT INTO eventmembers (eventid, memberid) VALUES ?`;
+  const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+  const selectMembers = `SELECT * FROM members WHERE userid = ?`;
   let query = db.query(sql, addeventdata, (err, result) => {
       if (err) {
           console.log(err);
@@ -128,7 +145,11 @@ app.post("/addeventquery", (req, res) => {
                   throw err;
               }
               if (!selectedPersons) {
-                  res.render("main", {data: userdata});
+                  db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                    db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                    });
+                  });
               } else {
                   const eventid = rows[0].eventid;
                   if (!Array.isArray(selectedPersons)) {
@@ -141,11 +162,19 @@ app.post("/addeventquery", (req, res) => {
                             console.log(err);
                             res.render("addentry", {data: userdata, error: 1 });
                         } else {
-                            res.render("main", {data: userdata});
+                          db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                            db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                              res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                            });
+                          });
                         }
                     });
                   } else {
-                    res.render("main", {data: userdata});
+                    db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                      db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                      });
+                    });
                   }
               }
           });
@@ -158,6 +187,8 @@ app.post("/editmemberquery", (req, res) => {
   const { userid, username, name } = req.body;
   const userdata = { userid, username, name };
   console.log(userdata);
+  const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+  const selectMembers = `SELECT * FROM members WHERE userid = ?`;
   let memberid = req.body.editid.trim();
   let category = req.body.editcategory.trim();
   const submit = req.body.submit;
@@ -171,7 +202,11 @@ app.post("/editmemberquery", (req, res) => {
       if (result.length == 0) {
         res.render("editmember", {data: userdata, error: 1 });
       } else {
-        res.render("main", {data: userdata});
+        db.query(selectEvents, userdata.userid, (err, eventlist) => {
+          db.query(selectMembers, userdata.userid, (err, memberlist) => {
+            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+          });
+        });
       }
     });
   } else if(submit === "Delete"){
@@ -184,7 +219,11 @@ app.post("/editmemberquery", (req, res) => {
       if (result.length == 0) {
         res.render("editmember", {data: userdata, error: 1 });
       } else {
-        res.render("main", {data: userdata});
+        db.query(selectEvents, userdata.userid, (err, eventlist) => {
+          db.query(selectMembers, userdata.userid, (err, memberlist) => {
+            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+          });
+        });
       }
     });
   } else {
@@ -205,6 +244,9 @@ app.post("/selecteventquery", (req, res) => {
   let sql3 = `SELECT * FROM members WHERE userid IN (SELECT userid FROM eventmembers WHERE eventid = ?) AND userid = ?`;
   let sql4 = `DELETE FROM events WHERE eventid = ?`;
   let sql5 = `DELETE FROM eventmembers WHERE eventid = ?`;
+  let sql6 = `SELECT * FROM members WHERE userid = ?`;
+  const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+  const selectMembers = `SELECT * FROM members WHERE userid = ?`;
   const submit = req.body.submit;
   if(submit === "Edit") {
         db.query(sql, eventid, (err, eventResult) => {
@@ -226,17 +268,25 @@ app.post("/selecteventquery", (req, res) => {
                         console.log(err);
                         throw err;
                     }
-                    console.log({
-                        events: eventResult,
-                        eventMembers: eventMembersResult,
-                        memberDetails: memberDetailsResult,
-                        data: userdata
-                    });
-                    res.render("editentry", {
-                        events: eventResult,
-                        eventMembers: eventMembersResult,
-                        memberDetails: memberDetailsResult,
-                        data: userdata
+                    db.query(sql6, userid2, (err, allMembersResult) => {
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
+                      console.log({
+                          allMembers: allMembersResult,
+                          events: eventResult,
+                          eventMembers: eventMembersResult,
+                          memberDetails: memberDetailsResult,
+                          data: userdata
+                      });
+                      res.render("editentry", {
+                          allMembers: allMembersResult,
+                          events: eventResult,
+                          eventMembers: eventMembersResult,
+                          memberDetails: memberDetailsResult,
+                          data: userdata
+                      });
                     });
                 });
             });
@@ -257,7 +307,11 @@ app.post("/selecteventquery", (req, res) => {
                 if (result.affectedRows === 0) {
                     res.render("selectevent", { data: userdata, error: 1 });
                 } else {
-                    res.render("main", { data: userdata });
+                    db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                      db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                      });
+                    });
                 }
             });
         });
@@ -278,12 +332,15 @@ app.post("/editeventquery", (req, res) => {
   let eventdesc = req.body.description.trim();
   let eventimportance = req.body.importance.trim();
   let eventdatetime = req.body.time.trim();
+  let location = req.body.location.trim();
   let eventid = req.body.eventid;
   console.log(eventid);
-  let sql = `UPDATE events SET eventname = ?, eventdesc = ?, eventimportance = ?, eventdatetime = ? WHERE eventid = ?`;
+  let sql = `UPDATE events SET eventname = ?, eventdesc = ?, eventimportance = ?, eventdatetime = ?, location = ? WHERE eventid = ?`;
   let sql2 = `DELETE FROM eventmembers WHERE eventid = ?`;
   let sql3 = `INSERT INTO eventmembers (eventid, memberid) VALUES ?`;
-  let query = db.query(sql, [eventname, eventdesc, eventimportance, eventdatetime, eventid], (err, result) => {
+  const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+  const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+  let query = db.query(sql, [eventname, eventdesc, eventimportance, eventdatetime, location, eventid], (err, result) => {
       if (err) {
           console.log(err);
           throw err;
@@ -297,7 +354,11 @@ app.post("/editeventquery", (req, res) => {
                   throw err;
               }
               if (!selectedPersons) {
-                  res.render("main", {data: userdata});
+                  db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                    db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                    });
+                  });
               } else {
                   if (!Array.isArray(selectedPersons)) {
                         selectedPersons = [selectedPersons];
@@ -309,11 +370,19 @@ app.post("/editeventquery", (req, res) => {
                             console.log(err);
                             res.render("editentry", {data: userdata, error: 1 });
                         } else {
-                            res.render("main", {data: userdata});
+                            db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                              db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                                res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                              });
+                            });
                         }
                     });
                   } else {
-                    res.render("main", {data: userdata});
+                    db.query(selectEvents, userdata.userid, (err, eventlist) => {
+                      db.query(selectMembers, userdata.userid, (err, memberlist) => {
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                      });
+                    });
                   }
               }
           });
@@ -321,12 +390,112 @@ app.post("/editeventquery", (req, res) => {
   });
 });
 
+app.post("/filtermembers", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    const selectFilter = `SELECT * FROM events WHERE eventid IN (SELECT eventid FROM eventmembers WHERE memberid = ?) AND userid = ?`;
+    let memberid = req.body.memberid.trim();
+    console.log(memberid);
+    if (memberid === "null") {
+      db.query(selectEvents, userdata.userid, (err, eventlist) => {
+        db.query(selectMembers, userdata.userid, (err, memberlist) => {
+          console.log(eventlist);
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+        });
+      });
+    } else {
+      db.query(selectFilter, [memberid, userdata.userid], (err, eventlistfiltered) => {
+        if (err) { console.log(err); }
+        db.query(selectEvents, userdata.userid, (err, eventlist) => {
+          db.query(selectMembers, userdata.userid, (err, memberlist) => {
+            console.log(eventlist);
+            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+          });
+        });
+      });
+    }
+});
+
+app.post("/filterlocations", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    const selectFilter = `SELECT * FROM events WHERE userid = ? AND location = ?`;
+    let location = req.body.location.trim();
+    console.log(location);
+    if (location === "null") {
+      db.query(selectEvents, userdata.userid, (err, eventlist) => {
+        db.query(selectMembers, userdata.userid, (err, memberlist) => {
+          console.log(eventlist);
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+        });
+      });
+    } else {
+      db.query(selectFilter, [userdata.userid, location], (err, eventlistfiltered) => {
+        if (err) { console.log(err); }
+        db.query(selectEvents, userdata.userid, (err, eventlist) => {
+          db.query(selectMembers, userdata.userid, (err, memberlist) => {
+            console.log(eventlist);
+            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+          });
+        });
+      });
+    }
+});
+
+app.post("/sorttime", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    const selectFilter = `SELECT * FROM events WHERE userid = ? ORDER BY eventdatetime`;
+    db.query(selectFilter, userdata.userid, (err, eventlistfiltered) => {
+      if (err) { console.log(err); }
+      db.query(selectEvents, userdata.userid, (err, eventlist) => {
+        db.query(selectMembers, userdata.userid, (err, memberlist) => {
+          console.log(eventlist);
+          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+        });
+      });
+    });
+});
+
+app.post("/sortimportance", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    const selectFilter = `SELECT * FROM events WHERE userid = ? ORDER BY FIELD(eventimportance, 'important','normal','low')`;
+    db.query(selectFilter, userdata.userid, (err, eventlistfiltered) => {
+      if (err) { console.log(err); }
+      db.query(selectEvents, userdata.userid, (err, eventlist) => {
+        db.query(selectMembers, userdata.userid, (err, memberlist) => {
+          console.log(eventlist);
+          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+        });
+      });
+    });
+});
+
 // routes for displaying more pages
 app.post("/main", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
-    res.render("main", {data: userdata});
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    db.query(selectEvents, userdata.userid, (err, eventlist) => {
+      db.query(selectMembers, userdata.userid, (err, memberlist) => {
+        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+      });
+    });
 });
 
 app.post("/addmember", (req, res) => {

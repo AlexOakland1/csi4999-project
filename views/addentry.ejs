@@ -26,10 +26,18 @@
                 </div>
                 <div class="row">
                     <div class="col1">
-                        <label for="time">Time:</label>
+                        <label for="time">Date and Time:</label>
                     </div>
                     <div class="col2">
-                        <input type="time" id="time" name="time">
+                        <input type="datetime-local" id="time" name="time" value="<%= new Date().toISOString().slice(0, 16) %>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="location">Location:</label>
+                    </div>
+                    <div class="col2">
+                        <textarea name="location" id="location"></textarea>
                     </div>
                 </div>
                 <div class="row">

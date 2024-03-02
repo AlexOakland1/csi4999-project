@@ -5,34 +5,103 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <h1> Placeholder </h1>
-        <p>Welcome, <%= data.name %>!</p>
-        <button onclick="window.location.href='/';">
-            log out
-        </button><br><br>
-        <form action="/addmember" method="post">
-            <input type="hidden" name="userid" value="<%= data.userid %>">
-            <input type="hidden" name="username" value="<%= data.username %>">
-            <input type="hidden" name="name" value="<%= data.name %>">
-            <button type="submit">Add Member</button>
-        </form><br>
-        <form action="/editmember" method="post">
-            <input type="hidden" name="userid" value="<%= data.userid %>">
-            <input type="hidden" name="username" value="<%= data.username %>">
-            <input type="hidden" name="name" value="<%= data.name %>">
-            <button type="submit">Edit/Delete Member</button>
-        </form><br>
-        <form action="/addentry" method="post">
-            <input type="hidden" name="userid" value="<%= data.userid %>">
-            <input type="hidden" name="username" value="<%= data.username %>">
-            <input type="hidden" name="name" value="<%= data.name %>">
-            <button type="submit">Add Event</button>
-        </form><br>
-        <form action="/selectentry" method="post">
-            <input type="hidden" name="userid" value="<%= data.userid %>">
-            <input type="hidden" name="username" value="<%= data.username %>">
-            <input type="hidden" name="name" value="<%= data.name %>">
-            <button type="submit">Edit/Delete Event</button>
-        </form>
+        <div id="login">
+            <h1> FamPlan Home Page </h1>
+            <p>Welcome, <%= data.name %>!</p><br>
+            <div class="row">
+                <div class="col1">
+                    <form action="/addmember" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <button type="submit">Add Member</button>
+                    </form><br>
+                    <form action="/editmember" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <button type="submit">Edit/Delete Member</button>
+                    </form><br>
+                    <form action="/addentry" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <button type="submit">Add Event</button>
+                    </form><br>
+                    <form action="/selectentry" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <button type="submit">Edit/Delete Event</button>
+                    </form><br>
+                    <button onclick="window.location.href='/';">
+                        log out
+                    </button>
+                </div>
+                <br><br>
+                <div class="col2">
+                    <form id="selecteventforum" action="/selecteventquery" method="post">
+                        <label for="editid">Select Event:</label><br><br>
+                        <% if (events.length > 0) { %>
+                            <% events.forEach((item, index) => { %>
+                                <input type="radio" id="event_<%= item.eventid %>" name="editid" value="<%= item.eventid %>" <% if (index === 0) { %>checked<% } %>>
+                                <label for="event_<%= item.eventid %>" class="radiolabel"><%= item.eventname %></label><br>
+                            <% }); %>
+                        <% } else { %>
+                            <p>No events found. Try adding some.</p>
+                        <% } %><br><br>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="submit" value="Edit" name="submit" class="pad"><br>
+                        <input type="submit" value="Delete" name="submit">
+                    </form><br>
+                    <form id="filtermembersform" action="/filtermembers" method="post">
+                        <label for="memberfilter">Filter by Member:</label><br><br>
+                        <select id="memberfilter" name="memberid">
+                            <option value="null">None</option>
+                            <% members.forEach((member) => { %>
+                                <option value="<%= member.memberid %>"><%= member.membername %></option>
+                            <% }); %>
+                        </select><br><br>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="submit" value="Filter">
+                    </form><br>
+                    <form id="filterlocationsform" action="/filterlocations" method="post">
+                        <label for="locationfilter">Filter by Location:</label><br><br>
+                        <select id="locationfilter" name="location">
+                            <option value="null">None</option>
+                            <% const uniqueEntries = new Set();
+                            fullevents.forEach((event) => {
+                                const entryString = JSON.stringify(event.location);
+                                if (!uniqueEntries.has(entryString)) {
+                                    uniqueEntries.add(entryString); %>
+                                    <option value="<%= event.location %>"><%= event.location %></option>
+                                <% }
+                            });
+                            %>
+                        </select><br><br>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="submit" value="Filter">
+                    </form><br>
+                    <form id="sorttimeform" action="/sorttime" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="submit" value="Sort By Time">
+                    </form><br>
+                    <form id="sortimportanceform" action="/sortimportance" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="submit" value="Sort By Importance">
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

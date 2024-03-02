@@ -33,13 +33,20 @@
                         <input type="datetime-local" id="time" name="time" value="<%= events[0].eventdatetime.toISOString().slice(0, -1) %>">
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col1">
+                        <label for="location">Location:</label>
+                    </div>
+                    <div class="col2">
+                        <textarea name="location" id="location"><%= events[0].location %></textarea>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col1">
                         <label for="person">Participant(s):</label>
                     </div>
                     <div class="col2">
-                        <% memberDetails.forEach((item) => { %>
+                        <% allMembers.forEach((item) => { %>
                             <input type="checkbox" id="person" name="person" value="<%= item.memberid %>" <% if(selectedMembers.includes(item.memberid)) { %> checked <% } %>>
                             <label for="person"> <%= item.membername %> </label>
                         <% }); %>
@@ -64,7 +71,7 @@
                 <input type="submit" value="Submit">
             </form>
             <br>
-            <form action="/selectentry" method="post">
+            <form action="/main" method="post">
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">

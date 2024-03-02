@@ -8,18 +8,17 @@
         <div id="login">
             <h1>Select an Event to Edit/Delete</h1>
             <p>Welcome, <%= data.name %>!</p>
-            <p>This page is probably temporary.</p>
+            <p>You aren't supposed to be here.</p>
             <form id="selecteventforum" action="/selecteventquery" method="post">
                 <div class="row">
                     <div class="col1">
                         <label for="editid">Select Event:</label>
                     </div>
                     <div class="col2">
-                        <select id="editid" name="editid">
-                            <%events.forEach((item)=>{%>
-                                <option value="<%=item.eventid%>"> <%=item.eventname%> </option>
-                            <%});%>
-                        </select>
+                        <%events.forEach((item)=>{%>
+                            <input type="radio" id="event_<%=item.eventid%>" name="editid" value="<%=item.eventid%>">
+                            <label for="event_<%=item.eventid%>" class="radiolabel"><%=item.eventname%></label><br>
+                        <%});%>
                     </div>
                 </div>
                 <input type="hidden" name="userid" value="<%= data.userid %>">
