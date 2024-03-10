@@ -47,8 +47,8 @@
                     </div>
                     <div class="col2">
                         <% allMembers.forEach((item) => { %>
-                            <input type="checkbox" id="person" name="person" value="<%= item.memberid %>" <% if(selectedMembers.includes(item.memberid)) { %> checked <% } %>>
-                            <label for="person"> <%= item.membername %> </label>
+                            <input type="checkbox" id="person_<%= item.memberid %>" name="person[]" value="<%= item.memberid %>" <% if(selectedMembers.includes(item.memberid)) { %> checked <% } %>>
+                            <label for="person_<%= item.memberid %>"> <%= item.membername %> </label>
                         <% }); %>
                     </div>
                 </div>
@@ -67,6 +67,9 @@
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                 <input type="hidden" name="eventid" value="<%= events[0].eventid %>">
                 <input type="submit" value="Submit">
             </form>
@@ -75,6 +78,9 @@
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                 <input type="submit" value="Back">
             </form>
         </div>

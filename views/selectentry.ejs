@@ -7,7 +7,7 @@
     <body>
         <div id="login">
             <h1>Select an Event to Edit/Delete</h1>
-            <p>Welcome, <%= data.name %>!</p>
+            <p>Welcome, <%= subuser.subusername %>!</p>
             <p>You aren't supposed to be here.</p>
             <form id="selecteventforum" action="/selecteventquery" method="post">
                 <div class="row">
@@ -24,6 +24,9 @@
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                 <input type="submit" value="Edit" name="submit">
                 <input type="submit" value="Delete" name="submit">
             </form>
@@ -32,6 +35,9 @@
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
             <input type="submit" value="Back">
         </div>
     </body>

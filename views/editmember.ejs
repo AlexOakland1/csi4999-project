@@ -7,7 +7,7 @@
     <body>
         <div id="login">
             <h1>Edit Family Member or Friend</h1>
-            <p>Welcome, <%= data.name %>!</p>
+            <p>Welcome, <%= subuser.subusername %>!</p>
             <form id="editmemberform" action="/editmemberquery" method="post">
                 <div class="row">
                     <div class="col1">
@@ -37,6 +37,9 @@
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                 <input type="submit" value="Apply" name="submit">
                 <input type="submit" value="Delete" name="submit">
             </form>
@@ -45,6 +48,9 @@
                 <input type="hidden" name="userid" value="<%= data.userid %>">
                 <input type="hidden" name="username" value="<%= data.username %>">
                 <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
             <input type="submit" value="Back">
         </div>
     </body>

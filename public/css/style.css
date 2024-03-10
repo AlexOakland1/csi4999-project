@@ -1,5 +1,5 @@
 body {
-    font-family: "DejaVu Sans", DejaVu, sans-serif;
+    font-family: "Noto Sans", Noto, sans-serif;
     color: black;
 }
 
@@ -16,6 +16,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 .col1 {
@@ -23,6 +24,23 @@ body {
     width: 30%;
     margin-right: 10px;
 }
+
+.col1 button {
+    display: inline-block;
+    min-width: 150px;
+    width: 20%;
+    box-sizing: border-box;
+    outline: 2px solid black;
+    border-radius: 3px;
+    background-color: white;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-style: outset;
+    border-color: #dddddd;
+    border-width: 2px;
+    font-size: 13px;
+}
+
 .col2 {
     width: 50%;
 }
@@ -44,7 +62,7 @@ textarea {
     border-radius: 3px;
     background-color: white;
     padding: 5px;
-    font-family: "DejaVu Sans", DejaVu, sans-serif;
+    font-family: "Noto Sans", Noto, sans-serif;
     font-size: 13px;
 }
 input[type="time"] {
@@ -69,10 +87,19 @@ input[type="submit"] {
     border-width: 2px;
 }
 button {
+    display: inline-block;
+    min-width: 150px;
+    width: 20%;
+    box-sizing: border-box;
     outline: 2px solid black;
     border-radius: 3px;
     background-color: white;
     padding: 5px;
+    margin-bottom: 10px;
+    border-style: outset;
+    border-color: #dddddd;
+    border-width: 2px;
+    font-size: 13px;
 }
 select {
     width: 50%;

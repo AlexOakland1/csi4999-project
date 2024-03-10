@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Welcome to FamPlan</h1>
+            <p>Hello, <%= data.name %>!</p>
+            <% if (subusers.length > 0) { %>
+            <p>Who is using the planner today?</p>
+            <form id="subuserlogin" action="/subuserlogin" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="subuserval">Select Family Member:</label>
+                    </div>
+                    <div class="col2">
+                        <% subusers.forEach((subuser, index) => { %>
+                            <input type="radio" id="event_<%= subuser.subuserid %>" name="subuserval" value="<%= subuser.subuserid %>" <% if (index === 0) { %>checked<% } %>>
+                            <label for="event_<%= subuser.subuserid %>" class="radiolabel"><%= subuser.subusername %></label><br>
+                        <% }); %>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subusers" value="<%= JSON.stringify(subusers) %>">
+                <input type="submit" value="Select User" name="submit"><br><br>
+                <input type="submit" value="Edit User" name="submit">
+                <input type="submit" value="Delete User" name="submit"><br><br>
+            </form>
+        <% } else { %>
+            <p>No family members found. Please add a family member to use the planner.</p>
+        <% } %>
+            <form action="/addsubuser" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subusers" value="<%= JSON.stringify(subusers) %>">
+                <button type="submit">Add New User</button>
+            </form>
+            <br>
+            <button onclick="window.location.href='/';">
+                Log Out
+            </button>
+        </div>
+    </body>
+</html>

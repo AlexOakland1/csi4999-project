@@ -41,7 +41,7 @@ app.get("/createacc", (req, res) => {
 
 //query routes
 app.post("/createaccount", (req, res) => {
-  let data = { userid: "0", username: req.body.username.trim(), password: req.body.password.trim(), name: req.body.realname.trim() };
+  let data = { username: req.body.username.trim(), password: req.body.password.trim(), name: req.body.realname.trim() };
   let pass = req.body.password.trim();
   let sql = `INSERT INTO users SET ?`;
   let query = db.query(sql, data, (err, result) => {
@@ -49,16 +49,42 @@ app.post("/createaccount", (req, res) => {
         console.log(err);
         res.render("createacc", { error: 1 });
     } else {
-      // pass user login data
-      const selectName = `SELECT userid, username, name FROM users WHERE password = ?`;
-      const selectEvents = `SELECT * FROM events WHERE userid = ?`;
-      const selectMembers = `SELECT * FROM members WHERE userid = ?`;
-      db.query(selectName, pass, (err, userdata) => {
-        db.query(selectEvents, userdata[0].userid, (err, eventlist) => {
-          db.query(selectMembers, userdata[0].userid, (err, memberlist) => {
-            res.render("main", {data: userdata[0], events: eventlist, members: memberlist, fullevents: eventlist});
+      let subuserSql = `INSERT INTO subusers (userid, subuserid, username, status) VALUES (?, '0', ?, 'Adult')`;
+      let subuserData = [result.insertId, req.body.username.trim()];
+      db.query(subuserSql, subuserData, (err, subuserResult) => {
+        if (err) {
+          console.log(err);
+          res.render("createacc", { error: 1 });
+        } else {
+          let subuserId = subuserResult.insertId;
+          let userSubuserSql = `INSERT INTO usersubusers (userid, subuserid) VALUES (?, ?)`;
+          let userSubuserData = [result.insertId, subuserId];
+          db.query(userSubuserSql, userSubuserData, (err, userSubuserResult) => {
+            if (err) {
+              console.log(err);
+              res.render("createacc", { error: 1 });
+            } else {
+              const selectSubusers = `SELECT * FROM subusers WHERE subuserid IN (SELECT subuserid FROM usersubusers WHERE userid = ?)`;
+              db.query(selectSubusers, result.insertId, (err, subusersData) => {
+                if (err) {
+                  console.log(err);
+                  res.render("createacc", { error: 1 });
+                } else {
+                  const selectName = `SELECT userid, username, name FROM users WHERE password = ?`;
+                  const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+                  const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+                  db.query(selectName, pass, (err, userdata) => {
+                    db.query(selectEvents, userdata[0].userid, (err, eventlist) => {
+                      db.query(selectMembers, userdata[0].userid, (err, memberlist) => {
+                        res.render("subuser", {data: userdata[0], events: eventlist, members: memberlist, fullevents: eventlist, subusers: subusersData});
+                      });
+                    });
+                  });
+                }
+              });
+            }
           });
-        });
+        }
       });
     }
   });
@@ -78,12 +104,15 @@ app.post("/loginaccount", (req, res) => {
     } else {
       // pass user login data
       const selectName = `SELECT userid, username, name FROM users WHERE password = ?`;
+      const selectSubusers = `SELECT * FROM subusers WHERE subuserid IN (SELECT subuserid FROM usersubusers WHERE userid = ?)`;
       const selectEvents = `SELECT * FROM events WHERE userid = ?`;
       const selectMembers = `SELECT * FROM members WHERE userid = ?`;
       db.query(selectName, pass, (err, userdata) => {
         db.query(selectEvents, userdata[0].userid, (err, eventlist) => {
           db.query(selectMembers, userdata[0].userid, (err, memberlist) => {
-            res.render("main", {data: userdata[0], events: eventlist, members: memberlist, fullevents: eventlist});
+            db.query(selectSubusers, userdata[0].userid, (err, subusersData) => {
+              res.render("subuser", {data: userdata[0], events: eventlist, members: memberlist, fullevents: eventlist, subusers: subusersData});
+            });
           });
         });
       });
@@ -91,11 +120,188 @@ app.post("/loginaccount", (req, res) => {
   });
 });
 
+app.post("/subuserlogin", (req, res) => {
+  const { userid, username, name } = req.body;
+  const userdata = { userid, username, name };
+  const submit = req.body.submit;
+  const subuserid = req.body.subuserval.trim();
+
+  if (submit === "Select User") {
+    const sql = `SELECT * FROM subusers WHERE subuserid = ?`;
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+
+    db.query(sql, subuserid, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      } else {
+        db.query(selectEvents, userid, (err, eventlist) => {
+          db.query(selectMembers, userid, (err, memberlist) => {
+            console.log(result[0]);
+            res.render("subuser", { data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: result[0] });
+          });
+        });
+      }
+    });
+  } else if (submit === "Edit User") {
+    const sql = `SELECT * FROM subusers WHERE subuserid = ?`;
+    db.query(sql, subuserid, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      } else {
+        res.render("editsubuser", { data: userdata, subuser: result[0] });
+      }
+    });
+  } else if (submit === "Delete User") {
+    const sql = `SELECT * FROM subusers WHERE userid = ?`;
+    const sql2 = `DELETE FROM usersubusers WHERE subuserid = ?`;
+    const sql3 = `DELETE FROM subusers WHERE subuserid = ?`;
+
+    db.query(sql2, subuserid, (err, del) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      } else {
+        db.query(sql3, subuserid, (err, del2) => {
+          if (err) {
+            console.log(err);
+            throw err;
+          } else {
+            db.query(sql, userid, (err, result) => {
+              if (err) {
+                console.log(err);
+                throw err;
+              } else {
+                console.log(result);
+                res.render("subuser", { data: userdata, subusers: result });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
+app.post("/addsubuserquery", (req, res) => {
+  const { userid, username, name } = req.body;
+  const userdata = { userid, username, name };
+  const submit = req.body.submit;
+  const subusername = req.body.addname.trim();
+  const subusercat = req.body.addcategory.trim();
+
+  if (submit === "Add User") {
+    let subuserSql = `INSERT INTO subusers (userid, subuserid, subusername, subusertype) VALUES (?, 0, ?, ?)`;
+    let subuserData = [userid, subusername, subusercat];
+
+    db.query(subuserSql, subuserData, (err, subuserResult) => {
+      if (err) {
+        console.log(err);
+        res.render("addsubuser", { error: 1 });
+      } else {
+        let subuserId = subuserResult.insertId;
+        let userSubuserSql = `INSERT INTO usersubusers (userid, subuserid) VALUES (?, ?)`;
+        let userSubuserData = [userid, subuserId];
+
+        db.query(userSubuserSql, userSubuserData, (err, userSubuserResult) => {
+          if (err) {
+            console.log(err);
+            res.render("addsubuser", { error: 1 });
+          } else {
+            const sql = `SELECT * FROM subusers WHERE userid = ?`;
+            db.query(sql, userid, (err, result) => {
+              if (err) {
+                console.log(err);
+                throw err;
+              } else {
+                res.render("subuser", { data: userdata, subusers: result });
+              }
+            });
+          }
+        });
+      }
+    });
+  } else {
+    const sql = `SELECT * FROM subusers WHERE userid = ?`;
+    db.query(sql, userid, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      } else {
+        res.render("subuser", { data: userdata, subusers: result });
+      }
+    });
+  }
+});
+
+app.post("/editsubuserquery", (req, res) => {
+  const { userid, username, name } = req.body;
+  const userdata = { userid, username, name };
+  const subuserid = req.body.subuserid;
+  const submit = req.body.submit;
+  const subusername = req.body.editname.trim();
+  const subusercat = req.body.editcategory.trim();
+
+  if (submit === "Edit User") {
+    let subuserSql = `UPDATE subusers SET subusername = ?, subusertype = ? WHERE subuserid = ?`;
+    let subuserData = [subusername, subusercat, subuserid];
+
+    db.query(subuserSql, subuserData, (err, subuserResult) => {
+      if (err) {
+        console.log(err);
+        res.render("addsubuser", { error: 1 });
+      } else {
+        const sql = `SELECT * FROM subusers WHERE userid = ?`;
+            db.query(sql, userid, (err, result) => {
+              if (err) {
+                console.log(err);
+                throw err;
+              } else {
+                res.render("subuser", { data: userdata, subusers: result });
+              }
+            });
+      }
+    });
+  } else {
+    const sql = `SELECT * FROM subusers WHERE userid = ?`;
+    db.query(sql, userid, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      } else {
+        res.render("subuser", { data: userdata, subusers: result });
+      }
+    });
+  }
+});
+
+app.post("/changeuser", (req, res) => {
+  const { userid, username, name } = req.body;
+  const userdata = { userid, username, name };
+  const eventlist = req.body.events;
+  const memberlist = req.body.members;
+  const sql = `SELECT * FROM subusers WHERE userid = ?`
+    let query = db.query(sql, userid, (err, result) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      } else {
+        res.render("subuser", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subusers: result});
+      }
+    });
+});
+
 app.post("/addmemberquery", (req, res) => {
   // pass user login data
   const { userid, username, name } = req.body;
   const userdata = { userid, username, name };
   console.log(userdata);
+  const eventlist = req.body.events;
+  const memberlist = req.body.members;
+  const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
   let addmemberdata = { memberid: "0", userid: req.body.userid.trim(), membername: req.body.addname.trim(), membercategory: req.body.addcategory.trim() };
   let sql = `INSERT INTO members SET ?`;
   const selectEvents = `SELECT * FROM events WHERE userid = ?`;
@@ -110,7 +316,7 @@ app.post("/addmemberquery", (req, res) => {
     } else {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
-          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
         });
       });
     }
@@ -122,6 +328,8 @@ app.post("/addeventquery", (req, res) => {
   const { userid, username, name } = req.body;
   const userdata = { userid, username, name };
   console.log(userdata);
+  const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
   let selectedPersons = req.body.person;
   console.log(selectedPersons);
   let addeventdata = { eventname: req.body.eventname.trim(), eventdesc: req.body.description.trim(), eventdatetime: req.body.time.trim(), eventimportance: req.body.importance.trim(), userid: req.body.userid.trim(), location: req.body.location.trim() };
@@ -147,7 +355,7 @@ app.post("/addeventquery", (req, res) => {
               if (!selectedPersons) {
                   db.query(selectEvents, userdata.userid, (err, eventlist) => {
                     db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                     });
                   });
               } else {
@@ -164,7 +372,7 @@ app.post("/addeventquery", (req, res) => {
                         } else {
                           db.query(selectEvents, userdata.userid, (err, eventlist) => {
                             db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                              res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                              res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                             });
                           });
                         }
@@ -172,7 +380,7 @@ app.post("/addeventquery", (req, res) => {
                   } else {
                     db.query(selectEvents, userdata.userid, (err, eventlist) => {
                       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                       });
                     });
                   }
@@ -187,6 +395,8 @@ app.post("/editmemberquery", (req, res) => {
   const { userid, username, name } = req.body;
   const userdata = { userid, username, name };
   console.log(userdata);
+  const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
   const selectEvents = `SELECT * FROM events WHERE userid = ?`;
   const selectMembers = `SELECT * FROM members WHERE userid = ?`;
   let memberid = req.body.editid.trim();
@@ -204,7 +414,7 @@ app.post("/editmemberquery", (req, res) => {
       } else {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
           });
         });
       }
@@ -221,7 +431,7 @@ app.post("/editmemberquery", (req, res) => {
       } else {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
           });
         });
       }
@@ -237,6 +447,8 @@ app.post("/selecteventquery", (req, res) => {
   const { userid, username, name } = req.body;
   const userdata = { userid, username, name };
   console.log(userdata);
+  const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
   let eventid = req.body.editid.trim();
   let userid2 = req.body.userid.trim();
   let sql = `SELECT * FROM events WHERE eventid = ?`;
@@ -278,14 +490,16 @@ app.post("/selecteventquery", (req, res) => {
                           events: eventResult,
                           eventMembers: eventMembersResult,
                           memberDetails: memberDetailsResult,
-                          data: userdata
+                          data: userdata,
+                          subuser: sub
                       });
                       res.render("editentry", {
                           allMembers: allMembersResult,
                           events: eventResult,
                           eventMembers: eventMembersResult,
                           memberDetails: memberDetailsResult,
-                          data: userdata
+                          data: userdata,
+                          subuser: sub
                       });
                     });
                 });
@@ -309,7 +523,7 @@ app.post("/selecteventquery", (req, res) => {
                 } else {
                     db.query(selectEvents, userdata.userid, (err, eventlist) => {
                       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                       });
                     });
                 }
@@ -326,6 +540,8 @@ app.post("/editeventquery", (req, res) => {
   const { userid, username, name } = req.body;
   const userdata = { userid, username, name };
   console.log(userdata);
+  const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
   let selectedPersons = req.body.person;
   console.log(selectedPersons);
   let eventname = req.body.eventname.trim();
@@ -356,7 +572,7 @@ app.post("/editeventquery", (req, res) => {
               if (!selectedPersons) {
                   db.query(selectEvents, userdata.userid, (err, eventlist) => {
                     db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                     });
                   });
               } else {
@@ -372,7 +588,7 @@ app.post("/editeventquery", (req, res) => {
                         } else {
                             db.query(selectEvents, userdata.userid, (err, eventlist) => {
                               db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                                res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                                res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                               });
                             });
                         }
@@ -380,7 +596,7 @@ app.post("/editeventquery", (req, res) => {
                   } else {
                     db.query(selectEvents, userdata.userid, (err, eventlist) => {
                       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
                       });
                     });
                   }
@@ -394,6 +610,8 @@ app.post("/filtermembers", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     const selectEvents = `SELECT * FROM events WHERE userid = ?`;
     const selectMembers = `SELECT * FROM members WHERE userid = ?`;
     const selectFilter = `SELECT * FROM events WHERE eventid IN (SELECT eventid FROM eventmembers WHERE memberid = ?) AND userid = ?`;
@@ -403,7 +621,7 @@ app.post("/filtermembers", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
         });
       });
     } else {
@@ -412,7 +630,7 @@ app.post("/filtermembers", (req, res) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
             console.log(eventlist);
-            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
           });
         });
       });
@@ -423,6 +641,8 @@ app.post("/filterlocations", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     const selectEvents = `SELECT * FROM events WHERE userid = ?`;
     const selectMembers = `SELECT * FROM members WHERE userid = ?`;
     const selectFilter = `SELECT * FROM events WHERE userid = ? AND location = ?`;
@@ -432,7 +652,7 @@ app.post("/filterlocations", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
         });
       });
     } else {
@@ -441,7 +661,7 @@ app.post("/filterlocations", (req, res) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
             console.log(eventlist);
-            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
           });
         });
       });
@@ -452,6 +672,8 @@ app.post("/sorttime", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     const selectEvents = `SELECT * FROM events WHERE userid = ?`;
     const selectMembers = `SELECT * FROM members WHERE userid = ?`;
     const selectFilter = `SELECT * FROM events WHERE userid = ? ORDER BY eventdatetime`;
@@ -460,7 +682,7 @@ app.post("/sorttime", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
         });
       });
     });
@@ -470,6 +692,8 @@ app.post("/sortimportance", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     const selectEvents = `SELECT * FROM events WHERE userid = ?`;
     const selectMembers = `SELECT * FROM members WHERE userid = ?`;
     const selectFilter = `SELECT * FROM events WHERE userid = ? ORDER BY FIELD(eventimportance, 'important','normal','low')`;
@@ -478,7 +702,7 @@ app.post("/sortimportance", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist});
+          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
         });
       });
     });
@@ -489,11 +713,14 @@ app.post("/main", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
+    console.log(sub);
     const selectEvents = `SELECT * FROM events WHERE userid = ?`;
     const selectMembers = `SELECT * FROM members WHERE userid = ?`;
     db.query(selectEvents, userdata.userid, (err, eventlist) => {
       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist});
+        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
       });
     });
 });
@@ -502,12 +729,17 @@ app.post("/addmember", (req, res) => {
     const { userid, username, name } = req.body;
     const userdata = { userid, username, name };
     console.log(userdata);
-    res.render("addmember", {data: userdata});
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
+    console.log(sub);
+    res.render("addmember", {data: userdata, subuser: sub});
 });
 
 app.post("/addentry", (req, res) => {
-   let id = req.body.userid.trim();
+    let id = req.body.userid.trim();
     let sql = `SELECT * FROM members WHERE userid = ?`;
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     let query = db.query(sql, id, (err, result) => {
     if (err) {
       console.log(err);
@@ -516,7 +748,7 @@ app.post("/addentry", (req, res) => {
       const { userid, username, name } = req.body;
       const userdata = { userid, username, name };
       console.log(userdata);
-      res.render("addentry", {members: result, data: userdata});
+      res.render("addentry", {members: result, data: userdata, subuser: sub});
       }
   });
 });
@@ -524,6 +756,8 @@ app.post("/addentry", (req, res) => {
 app.post("/editmember", (req, res) => {
     let id = req.body.userid.trim();
     let sql = `SELECT * FROM members WHERE userid = ?`;
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     let query = db.query(sql, id, (err, result) => {
     if (err) {
       console.log(err);
@@ -533,7 +767,7 @@ app.post("/editmember", (req, res) => {
       const { userid, username, name } = req.body;
       const userdata = { userid, username, name };
       console.log(result);
-      res.render("editmember", {members: result, data: userdata});
+      res.render("editmember", {members: result, data: userdata, subuser: sub});
     }
   });
 });
@@ -541,6 +775,8 @@ app.post("/editmember", (req, res) => {
 app.post("/selectentry", (req, res) => {
     let id = req.body.userid.trim();
     let sql = `SELECT * FROM events WHERE userid = ?`;
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
     let query = db.query(sql, id, (err, result) => {
     if (err) {
       console.log(err);
@@ -549,9 +785,18 @@ app.post("/selectentry", (req, res) => {
       const { userid, username, name } = req.body;
       const userdata = { userid, username, name };
       console.log(userdata);
-      res.render("selectentry", {events: result, data: userdata});
+      res.render("selectentry", {events: result, data: userdata, subuser: sub});
       }
   });
+});
+
+app.post("/addsubuser", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const sub = JSON.parse(req.body.subusers);
+    console.log(sub);
+    res.render("addsubuser", {data: userdata, subuser: sub});
 });
 
 app.post("/logout", (req, res) => {

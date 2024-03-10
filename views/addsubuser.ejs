@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Add Family Member or Friend</h1>
+            <p>Welcome, <%= data.name %>!</p>
+            <form id="addsubuserform" action="/addsubuserquery" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="addname">Name:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" id="addname" name="addname">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="addcategory">User Type:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="addcategory" name="addcategory">
+                            <option value="Adult">Adult</option>
+                            <option value="Child">Child</option>
+                            <option value="Friend">Friend</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="submit" value="Add User" name="submit">
+                <br><br>
+                <input type="submit" value="Back" name="submit">
+            </form>
+        </div>
+    </body>
+</html>

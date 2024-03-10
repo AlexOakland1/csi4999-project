@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Edit Family Member or Friend</h1>
+            <p>Welcome, <%= subuser.subusername %>!</p>
+            <form id="editsubuserform" action="/editsubuserquery" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="editname">Name:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" id="editname" name="editname" value="<%= subuser.subusername %>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="editcategory">User Type:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="editcategory" name="editcategory">
+                            <option value="Adult" <% if(subuser.subusertype === 'Adult') { %> selected <% } %>>Adult</option>
+                            <option value="Child" <% if(subuser.subusertype === 'Child') { %> selected <% } %>>Child</option>
+                            <option value="Friend" <% if(subuser.subusertype === 'Friend') { %> selected <% } %>>Friend</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="submit" value="Edit User" name="submit">
+                <br><br>
+                <input type="submit" value="Back" name="submit">
+            </form>
+        </div>
+    </body>
+</html>
