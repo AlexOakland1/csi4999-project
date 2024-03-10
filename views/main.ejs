@@ -10,6 +10,7 @@
             <p>Welcome, <%= subuser.subusername %>!</p><br>
             <div class="row">
                 <div class="col1">
+                    <% if (subuser.subusertype !== "Friend") { %>
                     <form action="/addmember" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
                         <input type="hidden" name="username" value="<%= data.username %>">
@@ -19,6 +20,7 @@
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <button type="submit">Add Member</button>
                     </form>
+                    <% } %>
                     <% if (subuser.subusertype === "Adult") { %>
                     <form action="/editmember" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
@@ -30,6 +32,7 @@
                         <button type="submit">Edit/Delete Member</button>
                     </form>
                     <% } %>
+                    <% if (subuser.subusertype !== "Friend") { %>
                     <form action="/addentry" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
                         <input type="hidden" name="username" value="<%= data.username %>">
@@ -39,7 +42,8 @@
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <button type="submit">Add Event</button>
                     </form>
-                    <form action="/selectentry" method="post">
+                    <% } %>
+                    <!--<form action="/selectentry" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
                         <input type="hidden" name="username" value="<%= data.username %>">
                         <input type="hidden" name="name" value="<%= data.name %>">
@@ -47,7 +51,7 @@
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <button type="submit">Edit/Delete Event</button>
-                    </form>
+                    </form>-->
                     <form action="/changeuser" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
                         <input type="hidden" name="username" value="<%= data.username %>">
@@ -73,8 +77,12 @@
                         <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <% if (subuser.subusertype !== "Friend") { %>
                         <input type="submit" value="Edit" name="submit" class="pad"><br>
+                        <% } %>
+                        <% if (subuser.subusertype === "Adult") { %>
                         <input type="submit" value="Delete" name="submit">
+                        <% } %>
                     </form><br>
                     <form id="filtermembersform" action="/filtermembers" method="post">
                         <label for="memberfilter">Filter by Member:</label><br><br>

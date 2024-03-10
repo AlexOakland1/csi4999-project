@@ -139,7 +139,7 @@ app.post("/subuserlogin", (req, res) => {
         db.query(selectEvents, userid, (err, eventlist) => {
           db.query(selectMembers, userid, (err, memberlist) => {
             console.log(result[0]);
-            res.render("subuser", { data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: result[0] });
+            res.render("main", { data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: result[0] });
           });
         });
       }
