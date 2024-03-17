@@ -8,6 +8,78 @@
         <div id="login">
             <h1> FamPlan Home Page </h1>
             <p>Welcome, <%= subuser.subusername %>!</p><br>
+            <div class="calendar-frame">
+            <h2>Calendar -
+                <% let firstDate = new Date(); %> <!-- Initialize firstDate with the current date -->
+                <% calendarData.forEach(week => { %>
+                    <% week.forEach(day => { %>
+                        <% if (day && firstDate.getTime() === new Date().getTime()) { %> <!-- Compare dates using getTime() -->
+                            <% firstDate = day; %>
+                        <% } %>
+                    <% }) %>
+                <% }) %>
+                <% let currentMonth = firstDate.getMonth(); %> <!-- Define currentMonth based on firstDate -->
+                <% let currentYear = firstDate.getYear(); %> <!-- Define currentMonth based on firstDate -->
+                <%= firstDate ? firstDate.toLocaleString('default', { month: 'long', year: 'numeric' }) : '' %>
+            </h2>
+            <div>
+                <form action="/prevmonth" method="post">
+                    <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
+                    <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
+                    <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
+                    <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
+                    <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
+                    <input type="hidden" name="month" value="<%= currentMonth %>">
+                    <input type="hidden" name="year" value="<%= currentYear %>">
+                    <button type="submit">Previous Month</button>
+                </form>
+                <form action="/nextmonth" method="post">
+                    <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
+                    <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
+                    <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
+                    <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
+                    <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
+                    <input type="hidden" name="month" value="<%= currentMonth %>">
+                    <input type="hidden" name="year" value="<%= currentYear %>">
+                    <button type="submit">Next Month</button>
+                </form>
+            </div>
+                <div class="calendar">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sun</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% calendarData.forEach(week => { %>
+                                <tr>
+                                    <% week.forEach(day => { %>
+                                        <% let eventExists = false; %>
+                                        <% if (day) { %>
+                                            <% events.forEach(event => { %>
+                                                <% if (event.eventdatetime.getDate() === day.getDate() && event.eventdatetime.getMonth() === day.getMonth() && event.eventdatetime.getFullYear() === day.getFullYear()) { %>
+                                                    <% eventExists = true; %>
+                                                    <td><%= event.eventname%></td>
+                                                <% } %>
+                                            <% }) %>
+                                        <% } %>
+                                        <% if (!eventExists) { %>
+                                            <td><%= day ? day.getDate() : '' %></td>
+                                        <% } %>
+                                    <% }) %>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="row">
                 <div class="col1">
                     <% if (subuser.subusertype !== "Friend") { %>
@@ -66,7 +138,7 @@
                         <% if (events.length > 0) { %>
                             <% events.forEach((item, index) => { %>
                                 <input type="radio" id="event_<%= item.eventid %>" name="editid" value="<%= item.eventid %>" <% if (index === 0) { %>checked<% } %>>
-                                <label for="event_<%= item.eventid %>" class="radiolabel"><%= item.eventname %></label><br>
+                                <label for="event_<%= item.eventid %>" class="radiolabel"><%= item.eventname %> <%= item.eventdatetime %></label><br>
                             <% }); %>
                         <% } else { %>
                             <p>No events found. Try adding some.</p>

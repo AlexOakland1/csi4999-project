@@ -39,6 +39,35 @@ app.get("/createacc", (req, res) => {
     res.render("createacc", {error: 0});
 });
 
+//calendar code
+
+//generate calendar dates
+function calendar(month, year) {
+    const lastday = new Date(year, month + 1, 0).getDate();
+    const firstday = new Date(year, month, 1).getDay();
+    const cal = [];
+    let counter = 1;
+
+    for (let i = 0; i < 6; i++) {
+        const week = [];
+        for (let j = 0; j < 7; j++) {
+            if ((i === 0 && j < firstday) || counter > lastday) {
+                week.push(null);
+            } else {
+                week.push(new Date(year, month, counter++));
+            }
+        }
+        cal.push(week);
+        if (counter > lastday) break;
+    }
+
+    return cal;
+}
+
+const month = new Date().getMonth();
+const year = new Date().getFullYear();
+let calendarData = calendar(month, year);
+
 //query routes
 app.post("/createaccount", (req, res) => {
   let data = { username: req.body.username.trim(), password: req.body.password.trim(), name: req.body.realname.trim() };
@@ -139,7 +168,8 @@ app.post("/subuserlogin", (req, res) => {
         db.query(selectEvents, userid, (err, eventlist) => {
           db.query(selectMembers, userid, (err, memberlist) => {
             console.log(result[0]);
-            res.render("main", { data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: result[0] });
+            console.log(userdata, eventlist, memberlist);
+            res.render("main", { data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: result[0], calendarData: calendarData});
           });
         });
       }
@@ -316,7 +346,7 @@ app.post("/addmemberquery", (req, res) => {
     } else {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
-          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
         });
       });
     }
@@ -355,7 +385,7 @@ app.post("/addeventquery", (req, res) => {
               if (!selectedPersons) {
                   db.query(selectEvents, userdata.userid, (err, eventlist) => {
                     db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                     });
                   });
               } else {
@@ -372,7 +402,7 @@ app.post("/addeventquery", (req, res) => {
                         } else {
                           db.query(selectEvents, userdata.userid, (err, eventlist) => {
                             db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                              res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                              res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                             });
                           });
                         }
@@ -380,7 +410,7 @@ app.post("/addeventquery", (req, res) => {
                   } else {
                     db.query(selectEvents, userdata.userid, (err, eventlist) => {
                       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                       });
                     });
                   }
@@ -414,7 +444,7 @@ app.post("/editmemberquery", (req, res) => {
       } else {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
           });
         });
       }
@@ -431,7 +461,7 @@ app.post("/editmemberquery", (req, res) => {
       } else {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+            res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
           });
         });
       }
@@ -523,7 +553,7 @@ app.post("/selecteventquery", (req, res) => {
                 } else {
                     db.query(selectEvents, userdata.userid, (err, eventlist) => {
                       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                       });
                     });
                 }
@@ -572,7 +602,7 @@ app.post("/editeventquery", (req, res) => {
               if (!selectedPersons) {
                   db.query(selectEvents, userdata.userid, (err, eventlist) => {
                     db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                      res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                     });
                   });
               } else {
@@ -588,7 +618,7 @@ app.post("/editeventquery", (req, res) => {
                         } else {
                             db.query(selectEvents, userdata.userid, (err, eventlist) => {
                               db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                                res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                                res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                               });
                             });
                         }
@@ -596,7 +626,7 @@ app.post("/editeventquery", (req, res) => {
                   } else {
                     db.query(selectEvents, userdata.userid, (err, eventlist) => {
                       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+                        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
                       });
                     });
                   }
@@ -621,7 +651,7 @@ app.post("/filtermembers", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
         });
       });
     } else {
@@ -630,7 +660,7 @@ app.post("/filtermembers", (req, res) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
             console.log(eventlist);
-            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
+            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
           });
         });
       });
@@ -652,7 +682,7 @@ app.post("/filterlocations", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+          res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
         });
       });
     } else {
@@ -661,7 +691,7 @@ app.post("/filterlocations", (req, res) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
             console.log(eventlist);
-            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
+            res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
           });
         });
       });
@@ -682,7 +712,7 @@ app.post("/sorttime", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
+          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
         });
       });
     });
@@ -702,7 +732,7 @@ app.post("/sortimportance", (req, res) => {
       db.query(selectEvents, userdata.userid, (err, eventlist) => {
         db.query(selectMembers, userdata.userid, (err, memberlist) => {
           console.log(eventlist);
-          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub});
+          res.render("main", {data: userdata, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
         });
       });
     });
@@ -720,7 +750,7 @@ app.post("/main", (req, res) => {
     const selectMembers = `SELECT * FROM members WHERE userid = ?`;
     db.query(selectEvents, userdata.userid, (err, eventlist) => {
       db.query(selectMembers, userdata.userid, (err, memberlist) => {
-        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub});
+        res.render("main", {data: userdata, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData});
       });
     });
 });
@@ -797,6 +827,44 @@ app.post("/addsubuser", (req, res) => {
     const sub = JSON.parse(req.body.subusers);
     console.log(sub);
     res.render("addsubuser", {data: userdata, subuser: sub});
+});
+
+app.post("/prevmonth", (req, res) => {
+    let events = JSON.parse(req.body.events);
+    console.log(events);
+    events.forEach(event => {
+      event.eventdatetime = new Date(event.eventdatetime);
+    });
+    console.log(JSON.parse(req.body.events)[0].eventdatetime);
+    let year = parseInt(req.body.year) + 1900 ;
+    console.log(year);
+    let month = parseInt(req.body.month) - 1;
+    console.log(month);
+    if (month === -1) {
+      month = 11;
+      year--;
+    }
+    let newcal = calendar(month, year)
+    res.render("main", {data: JSON.parse(req.body.data), events: events, members: JSON.parse(req.body.members), fullevents: JSON.parse(req.body.events), subuser: JSON.parse(req.body.subuser), calendarData: newcal})
+});
+
+app.post("/nextmonth", (req, res) => {
+    let events = JSON.parse(req.body.events);
+    console.log(events);
+    events.forEach(event => {
+      event.eventdatetime = new Date(event.eventdatetime);
+    });
+    console.log(JSON.parse(req.body.events)[0].eventdatetime);
+    let year = parseInt(req.body.year) + 1900 ;
+    console.log(year);
+    let month = parseInt(req.body.month) + 1;
+    console.log(month);
+    if (month === 12) {
+      month = 0;
+      year++;
+    }
+    let newcal = calendar(month, year)
+    res.render("main", {data: JSON.parse(req.body.data), events: events, members: JSON.parse(req.body.members), fullevents: JSON.parse(req.body.events), subuser: JSON.parse(req.body.subuser), calendarData: newcal})
 });
 
 app.post("/logout", (req, res) => {
