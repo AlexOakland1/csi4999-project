@@ -45,39 +45,55 @@
                 </form>
             </div>
                 <div class="calendar">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sun</th>
-                                <th>Mon</th>
-                                <th>Tue</th>
-                                <th>Wed</th>
-                                <th>Thu</th>
-                                <th>Fri</th>
-                                <th>Sat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% calendarData.forEach(week => { %>
+                    <form id="calendarforum" action="/selecteventquery" method="post">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <% week.forEach(day => { %>
-                                        <% let eventExists = false; %>
-                                        <% if (day) { %>
-                                            <% events.forEach(event => { %>
-                                                <% if (event.eventdatetime.getDate() === day.getDate() && event.eventdatetime.getMonth() === day.getMonth() && event.eventdatetime.getFullYear() === day.getFullYear()) { %>
-                                                    <% eventExists = true; %>
-                                                    <td><%= event.eventname%></td>
-                                                <% } %>
-                                            <% }) %>
-                                        <% } %>
-                                        <% if (!eventExists) { %>
-                                            <td><%= day ? day.getDate() : '' %></td>
-                                        <% } %>
-                                    <% }) %>
+                                    <th>Sun</th>
+                                    <th>Mon</th>
+                                    <th>Tue</th>
+                                    <th>Wed</th>
+                                    <th>Thu</th>
+                                    <th>Fri</th>
+                                    <th>Sat</th>
                                 </tr>
-                            <% }) %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% calendarData.forEach(week => { %>
+                                    <tr>
+                                        <% week.forEach(day => { %>
+                                            <% let eventExists = false; %>
+                                            <% if (day) { %>
+                                                <% events.forEach(event => { %>
+                                                    <% if (event.eventdatetime.getDate() === day.getDate() && event.eventdatetime.getMonth() === day.getMonth() && event.eventdatetime.getFullYear() === day.getFullYear()) { %>
+                                                        <% eventExists = true; %>
+                                                        <td>
+                                                        <input type="radio" id="calendar_<%= event.eventid %>" name="editid" value="<%= event.eventid %>" >
+                                                        <label for="calendar_<%= event.eventid %>" class="calendarlabel"><%= event.eventname %></label></td>
+                                                    <% } %>
+                                                <% }) %>
+                                            <% } %>
+                                            <% if (!eventExists) { %>
+                                                <td><%= day ? day.getDate() : '' %></td>
+                                            <% } %>
+                                        <% }) %>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                        <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                        <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <% if (subuser.subusertype !== "Friend") { %>
+                        <input type="submit" value="Edit" name="submit" class="pad"><br>
+                        <% } %>
+                        <% if (subuser.subusertype === "Adult") { %>
+                        <input type="submit" value="Delete" name="submit">
+                        <% } %>
+                    </form>
                 </div>
             </div>
             <div class="row">

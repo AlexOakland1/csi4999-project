@@ -182,6 +182,28 @@ input[type="radio"]:checked + .radiolabel {
     align-items: center;
 }
 
+.calendarlabel{
+    display: inline-block;
+    min-width: 100px;
+    max-width: 50%;
+    box-sizing: border-box;
+    outline: 2px solid black;
+    border-radius: 3px;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 0px;
+    border-style: outset;
+    border-color: #dddddd;
+    border-width: 2px;
+    font-size: 13px;
+}
+
+input[type="radio"]:checked + .calendarlabel  {
+    background-color: #bbbbbb;
+    border-color: #888888;
+}
+
 .calendar > table {
     width: 80%;
 }
