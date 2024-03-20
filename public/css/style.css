@@ -2,6 +2,19 @@ body {
     font-family: "Noto Sans", Noto, sans-serif;
     color: black;
 }
+h1 {
+    color: #d65461;
+    font-size: 60px;
+}
+
+p { 
+    color: black;
+    font-size: 30px;
+}
+
+h2 {
+    color: #0068af;
+}
 
 #login {
     max-width: 900px;
@@ -208,6 +221,8 @@ input[type="radio"]:checked + .calendarlabel  {
     width: 80%;
 }
 
-th, td {
+td {
+    border-style: outset;
+    border-color: black;
     padding: 32px; /* Add more padding around table cells */
 }
