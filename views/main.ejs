@@ -49,13 +49,14 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Sun</th>
-                                    <th>Mon</th>
-                                    <th>Tue</th>
-                                    <th>Wed</th>
-                                    <th>Thu</th>
-                                    <th>Fri</th>
-                                    <th>Sat</th>
+                                    <th bgcolor="#ADD8E6">Sun</th>
+                                    <th bgcolor="#ADD8E6">Mon</th>
+                                    <th bgcolor="#ADD8E6">Tue</th>
+                                    <th bgcolor="#ADD8E6">Wed</th>
+                                    <th bgcolor="#ADD8E6">Thu</th>
+                                    <th bgcolor="#ADD8E6">Fri</th>
+                                    <th bgcolor="#ADD8E6">Sat</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,7 +68,7 @@
                                                 <% events.forEach(event => { %>
                                                     <% if (event.eventdatetime.getDate() === day.getDate() && event.eventdatetime.getMonth() === day.getMonth() && event.eventdatetime.getFullYear() === day.getFullYear()) { %>
                                                         <% eventExists = true; %>
-                                                        <td>
+                                                        <td bgcolor="#90ee90">
                                                         <input type="radio" id="calendar_<%= event.eventid %>" name="editid" value="<%= event.eventid %>" >
                                                         <label for="calendar_<%= event.eventid %>" class="calendarlabel"><%= event.eventname %></label></td>
                                                     <% } %>
