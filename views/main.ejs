@@ -154,7 +154,7 @@
                         <% if (events.length > 0) { %>
                             <% events.forEach((item, index) => { %>
                                 <input type="radio" id="event_<%= item.eventid %>" name="editid" value="<%= item.eventid %>" <% if (index === 0) { %>checked<% } %>>
-                                <label for="event_<%= item.eventid %>" class="radiolabel"><%= item.eventname %> <%= item.eventdatetime %></label><br>
+                                <label for="event_<%= item.eventid %>" class="radiolabel"><%= item.eventname %></label><br>
                             <% }); %>
                         <% } else { %>
                             <p>No events found. Try adding some.</p>
