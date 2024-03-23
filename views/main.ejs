@@ -69,7 +69,7 @@
                                                     <% if (event.eventdatetime.getDate() === day.getDate() && event.eventdatetime.getMonth() === day.getMonth() && event.eventdatetime.getFullYear() === day.getFullYear()) { %>
                                                         <% eventExists = true; %>
                                                         <td bgcolor="#90ee90">
-                                                        <p><%= day ? day.getDate() : '' %></p>
+                                                        <p1><%= day ? day.getDate() : '' %></p1>
                                                         <input type="radio" id="calendar_<%= event.eventid %>" name="editid" value="<%= event.eventid %>" <% if (index === 0) { %>checked<% } %>>
                                                         <label for="calendar_<%= event.eventid %>" class="calendarlabel"><%= event.eventname %></label></td>
                                                     <% } %>
