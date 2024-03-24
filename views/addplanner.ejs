@@ -6,60 +6,48 @@
     </head>
     <body>
         <div id="login">
-            <h1>Add a New Planner</h1>
-            <form id="addentryform" action="/addeventquery" method="post">
+            <h1>Add a New Entry</h1>
+            <form id="addplannerform" action="/addplannerquery" method="post">
                 <div class="row">
                     <div class="col1">
-                        <label for="eventname">Name:</label>
+                        <label for="plannername">Name:</label>
                     </div>
                     <div class="col2">
-                        <input type="text" id="eventname" name="eventname">
+                        <input type="text" id="plannername" name="plannername">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col1">
-                        <label for="description">Description:</label>
+                        <label for="plannerdesc">Description:</label>
                     </div>
                     <div class="col2">
-                        <textarea name="description" id="description" rows="5" cols="30"></textarea>
+                        <textarea name="plannerdesc" id="plannerdesc" rows="5" cols="30"></textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col1">
-                        <label for="time">Date and Time:</label>
-                    </div>
-                    <div class="col2">
-                        <input type="datetime-local" id="time" name="time" value="<%= new Date().toISOString().slice(0, 16) %>">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col1">
-                        <label for="location">Location:</label>
-                    </div>
-                    <div class="col2">
-                        <textarea name="location" id="location"></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col1">
-                        <label for="person">Participant(s):</label>
+                        <label for="event">Event(s):</label>
                     </div>
                     <div class="col2">
                         <%members.forEach((item)=>{%>
-                            <input type="checkbox" id="person" name="person" value="<%= item.memberid %>">
-                            <label for="person"> <%= item.membername %> </label>
+                            <input type="checkbox" id="event" name="event" value="<%= item.eventid %>">
+                            <label for="event"> <%= item.eventname %> </label>
                         <%});%>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col1">
-                        <label for="importance">Importance Level:</label>
+                        <label for="plannertheme">Event Type:</label>
                     </div>
                     <div class="col2">
-                        <select id="importance" name="importance">
-                            <option value="normal">Normal</option>
-                            <option value="low">Low</option>
-                            <option value="important">Important</option>
+                        <select id="plannertheme" name="plannertheme">
+                            <option value="Normal">Normal</option>
+                            <option value="Vacation">Vacation</option>
+                            <option value="Birthday">Birthday</option>
+                            <option value="Family Event">Family Event</option>
+                            <option value="Work">Work</option>
+                            <option value="Sports">Sports</option>
+                            <option value="School">School</option>
                         </select>
                     </div>
                 </div>

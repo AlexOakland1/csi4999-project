@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <div id="login">
+            <h1>Edit Planner</h1>
+            <% const selectedEvents = plannerEvents.map(event => event.eventid); %>
+            <form id="editplannerform" action="/editplannerquery" method="post">
+                <div class="row">
+                    <div class="col1">
+                        <label for="plannername">Name:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" id="plannername" name="plannername" value="<%= planners[0].plannername %>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="plannerdesc">Description:</label>
+                    </div>
+                    <div class="col2">
+                        <textarea name="plannerdesc" id="plannerdesc" rows="5" cols="30"><%= planners[0].plannerdesc %></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="event">Participant(s):</label>
+                    </div>
+                    <div class="col2">
+                        <% allEvents.forEach((item) => { %>
+                            <input type="checkbox" id="person_<%= item.eventid %>" name="event[]" value="<%= item.eventid %>" <% if(selectedEvents.includes(item.eventid)) { %> checked <% } %>>
+                            <label for="person_<%= item.eventid %>"> <%= item.eventname %> </label>
+                        <% }); %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label for="plannertheme">Event Type:</label>
+                    </div>
+                    <div class="col2">
+                        <select id="plannertheme" name="plannertheme">
+                            <option value="Normal" <% if(planners[0].plannertheme === 'Normal') { %> selected <% } %>>Normal</option>
+                            <option value="Vacation" <% if(planners[0].plannertheme === 'Vacation') { %> selected <% } %>>Vacation</option>
+                            <option value="Birthday" <% if(planners[0].plannertheme === 'Birthday') { %> selected <% } %>>Birthday</option>
+                            <option value="Family Event" <% if(planners[0].plannertheme === 'Family Event') { %> selected <% } %>>Family Event</option>
+                            <option value="Work" <% if(planners[0].plannertheme === 'Work') { %> selected <% } %>>Work</option>
+                            <option value="Sports" <% if(planners[0].plannertheme === 'Sports') { %> selected <% } %>>Sports</option>
+                            <option value="School" <% if(planners[0].plannertheme === 'School') { %> selected <% } %>>School</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                <input type="hidden" name="plannerid" value="<%= planners[0].plannerid %>">
+                <input type="submit" value="Submit">
+            </form>
+            <br>
+            <form action="/main" method="post">
+                <input type="hidden" name="userid" value="<%= data.userid %>">
+                <input type="hidden" name="username" value="<%= data.username %>">
+                <input type="hidden" name="name" value="<%= data.name %>">
+                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                <input type="submit" value="Back">
+            </form>
+        </div>
+    </body>
+</html>
