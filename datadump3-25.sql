@@ -44,11 +44,15 @@ INSERT INTO `eventmembers` VALUES
 (47,1),
 (48,1),
 (74,1),
+(76,1),
+(78,1),
 (43,2),
 (46,2),
 (47,2),
 (48,2),
 (74,2),
+(77,2),
+(78,2),
 (60,6),
 (62,6),
 (62,7),
@@ -57,6 +61,7 @@ INSERT INTO `eventmembers` VALUES
 (47,9),
 (48,9),
 (74,9),
+(78,9),
 (54,13),
 (57,13),
 (54,14),
@@ -93,7 +98,7 @@ CREATE TABLE `events` (
   PRIMARY KEY (`eventid`),
   KEY `userid` (`userid`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,11 +108,11 @@ CREATE TABLE `events` (
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
 INSERT INTO `events` VALUES
-(43,'8th Birthday Party','For Melvin\'s 8th Birthday','2024-02-22 01:00:00','normal',1,'12th Avenue and Oak'),
+(43,'Harold\'s Birthday Party','For Harold\'s 8th Birthday','2024-02-22 06:00:00','normal',1,'12th Avenue and Oak'),
 (44,'Test','This might be a test.','2024-03-02 00:17:00','important',1,'Ohio'),
 (46,'Vacation','We\'re going to Six Flags','2024-03-05 00:50:00','important',1,'Ohio'),
 (47,'Baseball Game','The big game!','2024-03-09 17:08:00','normal',1,'12th Avenue and Oak'),
-(48,'going to the store','getting tomatoes and carrots','2024-03-04 02:30:00','important',1,'the store'),
+(48,'going to the store','getting tomatoes and carrots','2024-03-04 11:30:00','important',1,'the store'),
 (49,'Create my secret room','Needs to be under the bush.','1994-06-01 11:53:00','important',7,'Hyrule'),
 (50,'Find Rupees for Secret Room','Link needs a reason to find the secret room.','1994-07-07 12:00:00','important',7,'Hyrule'),
 (51,'Furnish Secret Room','Some torches would be nice.','1995-03-07 23:55:00','normal',7,'Hyrule'),
@@ -133,7 +138,10 @@ INSERT INTO `events` VALUES
 (71,'Number 2','System Requirements tables FURPS','2024-03-08 00:07:00','normal',8,'Midterm'),
 (72,'Number 3','Two use case tables with a description column, a table for each user, in addition to your use case diagrams (4 diagrams)','2024-03-08 00:07:00','normal',8,'Midterm'),
 (73,'Number 4','Activity diagram for one of your cases','2024-03-08 00:07:00','normal',8,'Midterm'),
-(74,'Bike Ride','Make sure everyone\'s bike is working and the tires are filled up!','2024-03-12 03:33:00','normal',1,'The Park');
+(74,'Bike Ride','Make sure everyone\'s bike is working and the tires are filled up!','2024-03-12 03:33:00','normal',1,'The Park'),
+(76,'Get Party Supplies','Buy balloons and any additional gifts that are needed.','2024-03-25 12:00:00','normal',1,'Party Store'),
+(77,'Get Birthday Cake','Make sure it isn\'t red velvet. Melpert hates it.','2024-03-26 14:00:00','important',1,'Gianni\'s Bakery'),
+(78,'Melpert\'s Birthday Party','He wants a surprise party, so make sure to get the family together!','2024-03-27 19:00:00','important',1,'Home');
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,6 +182,66 @@ INSERT INTO `members` VALUES
 (17,7,'Zelda','friend'),
 (18,7,'Ganondorf','friend');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `plannerevents`
+--
+
+DROP TABLE IF EXISTS `plannerevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `plannerevents` (
+  `eventid` int(11) NOT NULL,
+  `plannerid` int(11) NOT NULL,
+  PRIMARY KEY (`eventid`,`plannerid`),
+  KEY `plannerid` (`plannerid`),
+  CONSTRAINT `plannerevents_ibfk_1` FOREIGN KEY (`eventid`) REFERENCES `events` (`eventid`),
+  CONSTRAINT `plannerevents_ibfk_2` FOREIGN KEY (`plannerid`) REFERENCES `planners` (`plannerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `plannerevents`
+--
+
+LOCK TABLES `plannerevents` WRITE;
+/*!40000 ALTER TABLE `plannerevents` DISABLE KEYS */;
+INSERT INTO `plannerevents` VALUES
+(76,2),
+(77,2),
+(78,2);
+/*!40000 ALTER TABLE `plannerevents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `planners`
+--
+
+DROP TABLE IF EXISTS `planners`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `planners` (
+  `plannerid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `plannername` varchar(255) DEFAULT NULL,
+  `plannerdesc` varchar(255) DEFAULT NULL,
+  `plannertheme` enum('Normal','Vacation','Birthday','Family Event','Work','Sports','School') DEFAULT NULL,
+  PRIMARY KEY (`plannerid`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `planners_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `planners`
+--
+
+LOCK TABLES `planners` WRITE;
+/*!40000 ALTER TABLE `planners` DISABLE KEYS */;
+INSERT INTO `planners` VALUES
+(2,1,'Birthday Plans','For Melpert.','Birthday');
+/*!40000 ALTER TABLE `planners` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -282,4 +350,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-18 15:36:44
+-- Dump completed on 2024-03-25 12:31:12
