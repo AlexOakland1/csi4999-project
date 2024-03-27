@@ -6,7 +6,7 @@
     </head>
     <body>
         <div id="login">
-            <h1>Add a New Entry</h1>
+            <h1>Add a New Planner</h1>
             <form id="addplannerform" action="/addplannerquery" method="post">
                 <div class="row">
                     <div class="col1">
@@ -32,6 +32,7 @@
                         <%members.forEach((item)=>{%>
                             <input type="checkbox" id="event" name="event" value="<%= item.eventid %>">
                             <label for="event"> <%= item.eventname %> </label>
+                            <br>
                         <%});%>
                     </div>
                 </div>
