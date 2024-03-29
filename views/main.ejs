@@ -23,17 +23,6 @@
                 <%= firstDate ? firstDate.toLocaleString('default', { month: 'long', year: 'numeric' }) : '' %>
             </h2>
             <div>
-                <form action="/prevmonth" method="post">
-                    <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
-                    <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
-                    <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
-                    <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
-                    <input type="hidden" name="planners" value="<%= JSON.stringify(planners) %>">
-                    <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
-                    <input type="hidden" name="month" value="<%= currentMonth %>">
-                    <input type="hidden" name="year" value="<%= currentYear %>">
-                    <button type="submit">Previous Month</button>
-                </form>
                 <form action="/month" method="post">
                     <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
                     <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
@@ -67,6 +56,16 @@
                     <input type="hidden" name="year" value="<%= currentYear %>">
                     <button type="submit">Go</button>
                 </form>
+                <form action="/prevmonth" method="post">
+                    <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
+                    <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
+                    <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
+                    <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
+                    <input type="hidden" name="planners" value="<%= JSON.stringify(planners) %>">
+                    <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
+                    <input type="hidden" name="month" value="<%= currentMonth %>">
+                    <input type="hidden" name="year" value="<%= currentYear %>">
+                    <button type="submit">Previous Month</button>
                 <form action="/nextmonth" method="post">
                     <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
                     <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
@@ -127,8 +126,9 @@
                         <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <br/>
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad"><br>
+                        <input type="submit" value="Edit" name="submit" class="pad">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
                         <input type="submit" value="Delete" name="submit">

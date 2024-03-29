@@ -177,8 +177,8 @@ input[type="radio"] {
 input[type="radio"]:checked + .radiolabel {
     background-color: #bbbbbb;
     border-color: #888888;
-    font-size: 15px;
-    min-width: 200px;
+    /*font-size: 15px;
+    min-width: 200px;*/
 }
 
 .pad {
@@ -259,3 +259,6 @@ tbody {
     height: 100px;
 }
 
+select {
+    width: 100px;
+}
