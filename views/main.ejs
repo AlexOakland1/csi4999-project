@@ -134,36 +134,49 @@
                         <input type="submit" value="Delete" name="submit">
                         <% } %>
                     </form>
+                    <div class="row">
+                        <div class="col1">
+                            <form id="filterplannersform" action="/filterplanners" method="post">
+                                <label for="plannerfilter">Filter by Planner:</label><br><br>
+                                <select id="plannerfilter" name="plannerid">
+                                    <option value="null">None</option>
+                                    <% planners.forEach((planner) => { %>
+                                        <option value="<%= planner.plannerid %>"><%= planner.plannername %></option>
+                                    <% }); %>
+                                </select><br><br>
+                                <input type="hidden" name="userid" value="<%= data.userid %>">
+                                <input type="hidden" name="username" value="<%= data.username %>">
+                                <input type="hidden" name="name" value="<%= data.name %>">
+                                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                                <input type="submit" value="Filter">
+                            </form>
+                        </div>
+                        <div class="col2">
+                            <form id="filtertypeform" action="/filterplannertype" method="post">
+                                <label for="plannerfilter">Filter by Planner Type:</label><br><br>
+                                <select id="plannerfilter" name="plannerid">
+                                    <option id="radiolabel value="null">None</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Vacation">Vacation</option>
+                                    <option value="Birthday">Birthday</option>
+                                    <option value="Family Event">Family Event</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="School">School</option>
+                                </select><br><br>
+                                <input type="hidden" name="userid" value="<%= data.userid %>">
+                                <input type="hidden" name="username" value="<%= data.username %>">
+                                <input type="hidden" name="name" value="<%= data.name %>">
+                                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                                <input type="submit" value="Filter">
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <p>Planners are WIP, here be dragons:</p>
-                <form action="/addplanner" method="post">
-                    <input type="hidden" name="userid" value="<%= data.userid %>">
-                    <input type="hidden" name="username" value="<%= data.username %>">
-                    <input type="hidden" name="name" value="<%= data.name %>">
-                    <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
-                    <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
-                    <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
-                    <button type="submit">Add Planner</button>
-                </form>
-                <form action="/selectplannerquery" method="post">
-                    <select name="planners">
-                        <% planners.forEach(planner => { %>
-                        <option value="<%= planner.plannerid %>"><%= planner.plannername %></option>
-                        <% }) %>
-                    </select>
-                    <input type="hidden" name="userid" value="<%= data.userid %>">
-                    <input type="hidden" name="username" value="<%= data.username %>">
-                    <input type="hidden" name="name" value="<%= data.name %>">
-                    <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
-                    <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
-                    <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
-                    <% if (subuser.subusertype !== "Friend") { %>
-                    <input type="submit" value="Edit" name="submit" class="pad"><br>
-                    <% } %>
-                    <% if (subuser.subusertype === "Adult") { %>
-                    <input type="submit" value="Delete" name="submit">
-                    <% } %>
-                </form>
             </div>
             <div class="row">
                 <div class="col1">
@@ -209,11 +222,39 @@
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <button type="submit">Edit/Delete Event</button>
                     </form>-->
+                    <form action="/addplanner" method="post">
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                        <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                        <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <button type="submit">Add Planner</button>
+                    </form>
+                    <form action="/selectplannerquery" method="post">
+                        <select name="planners">
+                            <% planners.forEach(planner => { %>
+                            <option value="<%= planner.plannerid %>"><%= planner.plannername %></option>
+                            <% }) %>
+                        </select><br>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                        <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                        <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <% if (subuser.subusertype !== "Friend") { %>
+                        <input type="submit" value="Edit" name="submit" class="pad"><br>
+                        <% } %>
+                        <% if (subuser.subusertype === "Adult") { %>
+                        <input type="submit" value="Delete" name="submit">
+                        <% } %>
+                    </form>
                     <form action="/changeuser" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
                         <input type="hidden" name="username" value="<%= data.username %>">
                         <input type="hidden" name="name" value="<%= data.name %>">
-                        <button type="submit">Change User/Log Out</button>
+                        <button type="submit" class="logout">Change User/Log Out</button>
                     </form>
                 </div>
                 <br><br>

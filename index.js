@@ -958,7 +958,7 @@ app.post("/filtermembers", (req, res) => {
         db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
           db.query(selectEvents, userdata.userid, (err, eventlist) => {
             db.query(selectMembers, userdata.userid, (err, memberlist) => {
-              res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+              res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
             });
           });
         });
@@ -982,7 +982,7 @@ app.post("/filterlocations", (req, res) => {
       db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+            res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
           });
         });
       });
@@ -992,7 +992,7 @@ app.post("/filterlocations", (req, res) => {
         db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
           db.query(selectEvents, userdata.userid, (err, eventlist) => {
             db.query(selectMembers, userdata.userid, (err, memberlist) => {
-              res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+              res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
             });
           });
         });
@@ -1015,7 +1015,7 @@ app.post("/sorttime", (req, res) => {
       db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+            res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
           });
         });
       });
@@ -1037,11 +1037,79 @@ app.post("/sortimportance", (req, res) => {
       db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
         db.query(selectEvents, userdata.userid, (err, eventlist) => {
           db.query(selectMembers, userdata.userid, (err, memberlist) => {
-            res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+            res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
           });
         });
       });
     });
+});
+
+app.post("/filterplanners", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
+    const selectPlanners = `SELECT * FROM planners WHERE userid = ?`;
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    const selectFilter = `SELECT * FROM events WHERE eventid IN (SELECT eventid FROM plannerevents WHERE plannerid = ?) AND userid = ?`;
+    let plannerid = req.body.plannerid.trim();
+    console.log(plannerid);
+    if (plannerid === "null") {
+      db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
+        db.query(selectEvents, userdata.userid, (err, eventlist) => {
+          db.query(selectMembers, userdata.userid, (err, memberlist) => {
+            res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+          });
+        });
+      });
+    } else {
+      db.query(selectFilter, [plannerid, userdata.userid], (err, eventlistfiltered) => {
+        if (err) { console.log(err); }
+        db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
+          db.query(selectEvents, userdata.userid, (err, eventlist) => {
+            db.query(selectMembers, userdata.userid, (err, memberlist) => {
+              res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+            });
+          });
+        });
+      });
+    }
+});
+
+app.post("/filterplannertype", (req, res) => {
+    const { userid, username, name } = req.body;
+    const userdata = { userid, username, name };
+    console.log(userdata);
+    const { subuserid, subusername, subusertype } = req.body;
+    const sub = { subuserid, subusername, subusertype };
+    const selectPlanners = `SELECT * FROM planners WHERE userid = ?`;
+    const selectEvents = `SELECT * FROM events WHERE userid = ?`;
+    const selectMembers = `SELECT * FROM members WHERE userid = ?`;
+    const selectFilter = `SELECT * FROM events WHERE eventid IN (SELECT eventid FROM plannerevents WHERE plannerid in (SELECT plannerid FROM planners WHERE plannertheme = ?)) AND userid = ?`;
+    let plannerid = req.body.plannerid.trim();
+    console.log(plannerid);
+    if (plannerid === "null") {
+      db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
+        db.query(selectEvents, userdata.userid, (err, eventlist) => {
+          db.query(selectMembers, userdata.userid, (err, memberlist) => {
+            res.render("main", { data: userdata, planners: plannerlist, events: eventlist, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+          });
+        });
+      });
+    } else {
+      db.query(selectFilter, [plannerid, userdata.userid], (err, eventlistfiltered) => {
+        if (err) { console.log(err); }
+        db.query(selectPlanners, userdata.userid, (err, plannerlist) => {
+          db.query(selectEvents, userdata.userid, (err, eventlist) => {
+            db.query(selectMembers, userdata.userid, (err, memberlist) => {
+              res.render("main", { data: userdata, planners: plannerlist, events: eventlistfiltered, members: memberlist, fullevents: eventlist, subuser: sub, calendarData: calendarData });
+            });
+          });
+        });
+      });
+    }
 });
 
 // routes for displaying more pages

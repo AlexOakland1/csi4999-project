@@ -1,6 +1,8 @@
 body {
     font-family: "Noto Sans", Noto, sans-serif;
     color: black;
+    background-color: #b5e6e6;
+    background-image: url("/public/img/diamond2.png");
 }
 h1 {
     color: #d65461;
@@ -18,6 +20,10 @@ p1 {
 
 h2 {
     color: #0068af;
+}
+
+div {
+    background-color: white;
 }
 
 #login {
@@ -260,5 +266,17 @@ tbody {
 }
 
 select {
-    width: 100px;
+    width: 150px;
+    font-family: "Noto Sans", Noto, sans-serif;
+    margin-bottom: 10px;
+}
+
+select > option{
+    background-color: white;
+    color: black;
+    font-family: "Noto Sans", Noto, sans-serif;
+}
+
+.logout {
+    margin-top: 10px;
 }
