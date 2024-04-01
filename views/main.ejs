@@ -66,6 +66,7 @@
                     <input type="hidden" name="month" value="<%= currentMonth %>">
                     <input type="hidden" name="year" value="<%= currentYear %>">
                     <button type="submit">Previous Month</button>
+                </form>
                 <form action="/nextmonth" method="post">
                     <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
                     <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">

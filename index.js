@@ -1225,6 +1225,7 @@ app.post("/addsubuser", (req, res) => {
 });
 
 app.post("/prevmonth", (req, res) => {
+    console.log(req.body);
     let events = JSON.parse(req.body.events);
     console.log(events);
     events.forEach(event => {
@@ -1263,6 +1264,7 @@ app.post("/nextmonth", (req, res) => {
 });
 
 app.post("/month", (req, res) => {
+    console.log(req.body);
     let events = JSON.parse(req.body.events);
     console.log(events);
     events.forEach(event => {
