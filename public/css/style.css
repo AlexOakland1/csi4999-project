@@ -68,6 +68,12 @@ div {
     display: flex;
 }
 
+.button-container-calendar {
+    margin-left: 300px;
+    display: flex;
+
+}
+
 .col2 {
     width: 50%;
 }
