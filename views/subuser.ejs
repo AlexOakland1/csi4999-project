@@ -5,17 +5,17 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login"  style="background-color:#F0F0F0">
             <h1>Welcome to FamPlan</h1>
             <p>Hello, <%= data.name %>!</p>
             <% if (subusers.length > 0) { %>
             <p>Who is using the planner today?</p>
-            <form id="subuserlogin" action="/subuserlogin" method="post">
-                <div class="row">
-                    <div class="col1">
+            <form id="subuserlogin" action="/subuserlogin" method="post"  style="background-color:#F0F0F0">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="subuserval">Select Family Member:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <% subusers.forEach((subuser, index) => { %>
                             <input type="radio" id="event_<%= subuser.subuserid %>" name="subuserval" value="<%= subuser.subuserid %>" <% if (index === 0) { %>checked<% } %>>
                             <label for="event_<%= subuser.subuserid %>" class="radiolabel"><%= subuser.subusername %></label><br>

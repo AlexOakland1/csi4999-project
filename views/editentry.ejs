@@ -5,58 +5,58 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login"  style="background-color:#F0F0F0">
             <h1>Edit Existing Entry</h1>
             <% const selectedMembers = eventMembers.map(member => member.memberid); %>
             <form id="editentryform" action="/editeventquery" method="post">
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="eventname">Name:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <input type="text" id="eventname" name="eventname" value="<%= events[0].eventname %>">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="description">Description:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <textarea name="description" id="description" rows="5" cols="30"><%= events[0].eventdesc %></textarea>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="time">Date and Time:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <input type="datetime-local" id="time" name="time" value="<%= events[0].eventdatetime.toISOString().slice(0, -1) %>">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="location">Location:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <textarea name="location" id="location"><%= events[0].location %></textarea>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="person">Participant(s):</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <% allMembers.forEach((item) => { %>
                             <input type="checkbox" id="person_<%= item.memberid %>" name="person[]" value="<%= item.memberid %>" <% if(selectedMembers.includes(item.memberid)) { %> checked <% } %>>
                             <label for="person_<%= item.memberid %>"> <%= item.membername %> </label>
                         <% }); %>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="importance">Importance Level:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <select id="importance" name="importance">
                             <option value="normal" <% if(events[0].eventimportance === 'normal') { %> selected <% } %>>Normal</option>
                             <option value="low" <% if(events[0].eventimportance === 'low') { %> selected <% } %>>Low</option>

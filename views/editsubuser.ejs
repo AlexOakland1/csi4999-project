@@ -5,23 +5,23 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login"  style="background-color:#F0F0F0">
             <h1>Edit Family Member or Friend</h1>
             <p>Welcome, <%= subuser.subusername %>!</p>
             <form id="editsubuserform" action="/editsubuserquery" method="post">
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="editname">Name:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <input type="text" id="editname" name="editname" value="<%= subuser.subusername %>">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="editcategory">User Type:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <select id="editcategory" name="editcategory">
                             <option value="Adult" <% if(subuser.subusertype === 'Adult') { %> selected <% } %>>Adult</option>
                             <option value="Child" <% if(subuser.subusertype === 'Child') { %> selected <% } %>>Child</option>

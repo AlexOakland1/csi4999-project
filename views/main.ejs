@@ -6,7 +6,7 @@
     </head>
     <body>
         <div id="login" style="background-color:#F0F0F0">
-            <img src="../img/logo.png"><br>
+            <img src="../img/logo.png" style="width:25px; height:25px">
             <h1> FamPlan Home Page </h1>
             <p>Welcome, <%= subuser.subusername %>!</p><br>
             <div class="calendar-frame" style="background-color:#F0F0F0">
@@ -23,7 +23,7 @@
                 <% let currentYear = firstDate.getYear(); %> <!-- Define currentMonth based on firstDate -->
                 <%= firstDate ? firstDate.toLocaleString('default', { month: 'long', year: 'numeric' }) : '' %>
             </h2>
-            <div>
+            <div style="background-color:#F0F0F0">
                 <form action="/month" method="post" style="background-color:#F0F0F0">
                     <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
                     <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">

@@ -5,23 +5,23 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login"  style="background-color:#F0F0F0">
             <h1>Add Family Member or Friend</h1>
             <p>Welcome, <%= subuser.subusername %>!</p>
             <form id="addmemberform" action="/addmemberquery" method="post">
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="addname">Name:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <input type="text" id="addname" name="addname">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="addcategory">Relation Status:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <select id="addcategory" name="addcategory">
                             <option value="spouse">Spouse</option>
                             <option value="child">Child</option>
