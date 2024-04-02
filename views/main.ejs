@@ -5,10 +5,11 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login" style="background-color:#F0F0F0">
+            <img src="../img/logo.png"><br>
             <h1> FamPlan Home Page </h1>
             <p>Welcome, <%= subuser.subusername %>!</p><br>
-            <div class="calendar-frame">
+            <div class="calendar-frame" style="background-color:#F0F0F0">
             <h2>Calendar -
                 <% let firstDate = new Date(); %> <!-- Initialize firstDate with the current date -->
                 <% calendarData.forEach(week => { %>
@@ -23,7 +24,7 @@
                 <%= firstDate ? firstDate.toLocaleString('default', { month: 'long', year: 'numeric' }) : '' %>
             </h2>
             <div>
-                <form action="/month" method="post">
+                <form action="/month" method="post" style="background-color:#F0F0F0">
                     <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
                     <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
                     <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
@@ -56,8 +57,8 @@
                     <input type="hidden" name="year" value="<%= currentYear %>">
                     <button type="submit">Go</button>
                 </form>
-                <div class="button-container-calendar">
-                    <form action="/prevmonth" method="post">
+                <div class="button-container-calendar" style="background-color:#F0F0F0">
+                    <form action="/prevmonth" method="post" style="background-color:#F0F0F0">
                         <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
                         <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
                         <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
@@ -81,8 +82,8 @@
                     </form>
                 </div>
             </div>
-                <div class="calendar">
-                    <form id="calendarforum" action="/selecteventquery" method="post">
+                <div class="calendar" style="background-color:#F0F0F0">
+                    <form id="calendarforum" action="/selecteventquery" method="post" style="background-color:#F0F0F0">
                         <table>
                             <thead>
                                 <tr>
@@ -131,14 +132,14 @@
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <br/>
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad">
+                        <input type="submit" value="Edit" name="submit" class="pad" style="background-color:#6283FC">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
-                        <input type="submit" value="Delete" name="submit">
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FF0000">
                         <% } %>
                     </form>
-                    <div class="row">
-                        <div class="col1">
+                    <div class="row" style="background-color:#F0F0F0">
+                        <div class="col1" style="background-color:#F0F0F0">
                             <form id="filterplannersform" action="/filterplanners" method="post">
                                 <label for="plannerfilter">Filter by Planner:</label><br><br>
                                 <select id="plannerfilter" name="plannerid">
@@ -156,7 +157,7 @@
                                 <input type="submit" value="Filter">
                             </form>
                         </div>
-                        <div class="col2">
+                        <div class="col2" style="background-color:#F0F0F0">
                             <form id="filtertypeform" action="/filterplannertype" method="post">
                                 <label for="plannerfilter">Filter by Planner Type:</label><br><br>
                                 <select id="plannerfilter" name="plannerid">
@@ -181,9 +182,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col1">
-                    <div class="button-container">
+            <div class="row" style="background-color:#F0F0F0">
+                <div class="col1" style="background-color:#F0F0F0">
+                    <div class="button-container" style="background-color:#F0F0F0">
                     <% if (subuser.subusertype !== "Friend") { %>
                     <form action="/addmember" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
@@ -207,7 +208,7 @@
                     </form>
                     </div>
                     <% } %>
-                    <div class="button-container">
+                    <div class="button-container" style="background-color:#F0F0F0">
                     <% if (subuser.subusertype !== "Friend") { %>
                     <form action="/addentry" method="post">
                         <input type="hidden" name="userid" value="<%= data.userid %>">
@@ -252,10 +253,10 @@
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px;">
+                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px; background-color:#6283FC;">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
-                        <input type="submit" value="Delete" name="submit">
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FF0000">
                         <% } %>
                     </form>
                     <form action="/changeuser" method="post">
@@ -266,7 +267,7 @@
                     </form>
                 </div>
                 <br>
-                <div class="col2">
+                <div class="col2" style="background-color:#F0F0F0">
                     <form id="selecteventforum" action="/selecteventquery" method="post">
                         <label for="editid">Select Event:</label><br><br>
                         <% if (events.length > 0) { %>
@@ -284,10 +285,10 @@
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px;">
+                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px; background-color:#6283FC">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
-                        <input type="submit" value="Delete" name="submit">
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FF0000">
                         <% } %>
                     </form><br>
                     <form id="filtermembersform" action="/filtermembers" method="post">
