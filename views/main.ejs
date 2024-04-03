@@ -6,7 +6,8 @@
     </head>
     <body>
         <div id="login" style="background-color:#F0F0F0">
-            <img src="../img/logo.png" style="width:25px; height:25px">
+            <img src="../public/img/logo.png" alt="Logo"
+                align="left">
             <h1> FamPlan Home Page </h1>
             <p>Welcome, <%= subuser.subusername %>!</p><br>
             <div class="calendar-frame" style="background-color:#F0F0F0">
@@ -132,10 +133,10 @@
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <br/>
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad" style="background-color:#6283FC">
+                        <input type="submit" value="Edit" name="submit" class="pad" style="background-color:#7C87FD">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
-                        <input type="submit" value="Delete" name="submit" style="background-color:#FF0000">
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FC6565">
                         <% } %>
                     </form>
                     <div class="row" style="background-color:#F0F0F0">
@@ -253,10 +254,10 @@
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px; background-color:#6283FC;">
+                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px; background-color:#7C87FD;">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
-                        <input type="submit" value="Delete" name="submit" style="background-color:#FF0000">
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FC6565">
                         <% } %>
                     </form>
                     <form action="/changeuser" method="post">
@@ -285,10 +286,10 @@
                         <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <% if (subuser.subusertype !== "Friend") { %>
-                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px; background-color:#6283FC">
+                        <input type="submit" value="Edit" name="submit" class="pad" style="margin-right: 5px; background-color:#7C87FD">
                         <% } %>
                         <% if (subuser.subusertype === "Adult") { %>
-                        <input type="submit" value="Delete" name="submit" style="background-color:#FF0000">
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FC6565">
                         <% } %>
                     </form><br>
                     <form id="filtermembersform" action="/filtermembers" method="post">

@@ -6,6 +6,8 @@
     </head>
     <body>
         <div id="login"  style="background-color:#F0F0F0">
+            <img src="../public/img/logo.png" alt="Logo"
+                align="left">
             <h1>Add a New Planner</h1>
             <form id="addentryform" action="/addeventquery" method="post">
                 <div class="row"  style="background-color:#F0F0F0">
@@ -57,10 +59,10 @@
                         <label for="importance">Importance Level:</label>
                     </div>
                     <div class="col2"  style="background-color:#F0F0F0">
-                        <select id="importance" name="importance">
-                            <option value="normal">Normal</option>
-                            <option value="low">Low</option>
-                            <option value="important">Important</option>
+                        <select id="importance">
+                            <option class="normal">Normal</option>
+                            <option class="low">Low</option>
+                            <option class="important">Important</option>
                         </select>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ body {
 h1 {
     color: #d65461;
     font-size: 60px;
+    
 }
 
 p { 
@@ -277,20 +278,31 @@ tbody {
     height: 100px;
 }
 
-select {
+select option{
     width: 306px;
     font-family: "Noto Sans", Noto, sans-serif;
     margin-bottom: 10px;
     text-align: center;
 }
-
-select > option{
-    background-color: white;
-    color: black;
-    font-family: "Noto Sans", Noto, sans-serif;
+.normal {
+    background-color: #F9FD7C;
     
+}
+      
+.low {
+    background-color: #A3FD7C;
+}
+      
+.important {
+    background-color: #FD7C8A;
 }
 
 .logout {
     margin-top: 10px;
 }
+
+img {
+    
+    padding: 5px;
+    width: 150px;
+  }

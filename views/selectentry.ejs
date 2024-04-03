@@ -5,16 +5,18 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login"  style="background-color:#F0F0F0">
+            <img src="../public/img/logo.png" alt="Logo"
+                align="left">
             <h1>Select an Event to Edit/Delete</h1>
             <p>Welcome, <%= subuser.subusername %>!</p>
             <p>You aren't supposed to be here.</p>
             <form id="selecteventforum" action="/selecteventquery" method="post">
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="editid">Select Event:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <%events.forEach((item)=>{%>
                             <input type="radio" id="event_<%=item.eventid%>" name="editid" value="<%=item.eventid%>">
                             <label for="event_<%=item.eventid%>" class="radiolabel"><%=item.eventname%></label><br>

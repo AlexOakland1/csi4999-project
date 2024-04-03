@@ -5,42 +5,44 @@
         <link rel="stylesheet" href="../public/css/style.css">
     </head>
     <body>
-        <div id="login">
+        <div id="login"  style="background-color:#F0F0F0">
+            <img src="../public/img/logo.png" alt="Logo"
+                align="left">
             <h1>Edit Planner</h1>
             <% const selectedEvents = plannerEvents.map(event => event.eventid); %>
             <form id="editplannerform" action="/editplannerquery" method="post">
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="plannername">Name:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <input type="text" id="plannername" name="plannername" value="<%= planners[0].plannername %>">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="plannerdesc">Description:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <textarea name="plannerdesc" id="plannerdesc" rows="5" cols="30"><%= planners[0].plannerdesc %></textarea>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="event">Participant(s):</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <% allEvents.forEach((item) => { %>
                             <input type="checkbox" id="person_<%= item.eventid %>" name="event[]" value="<%= item.eventid %>" <% if(selectedEvents.includes(item.eventid)) { %> checked <% } %>>
                             <label for="person_<%= item.eventid %>"> <%= item.eventname %> </label>
                         <% }); %>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col1">
+                <div class="row"  style="background-color:#F0F0F0">
+                    <div class="col1"  style="background-color:#F0F0F0">
                         <label for="plannertheme">Event Type:</label>
                     </div>
-                    <div class="col2">
+                    <div class="col2"  style="background-color:#F0F0F0">
                         <select id="plannertheme" name="plannertheme">
                             <option value="Normal" <% if(planners[0].plannertheme === 'Normal') { %> selected <% } %>>Normal</option>
                             <option value="Vacation" <% if(planners[0].plannertheme === 'Vacation') { %> selected <% } %>>Vacation</option>

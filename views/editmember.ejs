@@ -6,6 +6,8 @@
     </head>
     <body>
         <div id="login"  style="background-color:#F0F0F0">
+            <img src="../public/img/logo.png" alt="Logo"
+                align="left">
             <h1>Edit Family Member or Friend</h1>
             <p>Welcome, <%= subuser.subusername %>!</p>
             <form id="editmemberform" action="/editmemberquery" method="post">
@@ -41,7 +43,7 @@
                 <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
                 <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                 <input type="submit" value="Apply" name="submit">
-                <input type="submit" value="Delete" name="submit">
+                <input type="submit" value="Delete" name="submit" style="background-color:#FC6565">
             </form>
             <br>
             <form action="/main" method="post">
