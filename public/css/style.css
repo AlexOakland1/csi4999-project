@@ -7,15 +7,15 @@ body {
 h1 {
     color: #d65461;
     font-size: 60px;
-    
+
 }
 
-p { 
+p {
     color: black;
     font-size: 30px;
 }
 
-p1 { 
+p1 {
     color: black;
 }
 
@@ -67,6 +67,7 @@ div {
 
 .button-container{
     display: flex;
+    justify-content: center;
 }
 
 .button-container-calendar {
@@ -144,10 +145,92 @@ select {
     background-color: white;
     padding: 5px;
 }
+
+
+.calendar-frame-mobile {
+    display: none;
+}
 @media screen and (max-width: 600px) {
-    .row {
+    .calendar-frame {
+        display: none;
+    }
+
+    .calendar-frame-mobile {
+        display: inline;
+    }
+
+    .calendarlabel-mobile{
+        display: inline-block;
+        /*min-width: 80px;
+        max-width: 50%;*/
+        box-sizing: border-box;
+        outline: 2px solid black;
+        border-radius: 3px;
+        background-color: white;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 0px;
+        border-style: outset;
+        border-color: #dddddd;
+        border-width: 2px;
+        font-size: 13px;
+        height: max-content;
+        height: 60px;
+    }
+    form button {
+        margin-top: 10px;
+    }
+    .calendar-mobile {
+        display: flex;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
+        background-color: #F0F0F0;
+    }
+    .calendar > table {
+        width: 50px;
+    }
+    .calendar-mobile label input[type="radio"] {
+        margin: 5px auto;
+    }
+    .calendar-mobile label p1 {
+        margin: 5px auto;
+    }
+    .calendarlabel {
+        width: 66%;
+        padding: 2px;
+    }
+    td {
+        padding: 5px;
+        width: 100%;
+        text-align: center;
+    }
+    tr {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    th {
+        width: 100%;
+        text-align: center;
+    }
+    tbody {
+        width: 100%;
+    }
+    .button-container-calendar-mobile {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    .button-container-calendar-mobile form {
+        margin: 0;
+    }
+    .button-container-calendar-mobile form button {
+        margin: 5px;
+    }
+    .row {
+        display: flex;
+        flex-direction: column;
     }
     .col1, .col2 {
         width: 100%;
@@ -155,6 +238,7 @@ select {
         text-align: center;
     }
 }
+
 
 .arrow {
   border: solid black;
@@ -218,9 +302,9 @@ input[type="radio"]:checked + .radiolabel {
 }
 
 .calendar {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    resize: horizontal;
 }
 
 .calendarlabel{
@@ -238,9 +322,8 @@ input[type="radio"]:checked + .radiolabel {
     border-color: #dddddd;
     border-width: 2px;
     font-size: 13px;
-    height:max-content;
+    height: max-content;
     height: 60px;
-
 }
 
 input[type="radio"]:checked + .calendarlabel  {
@@ -248,10 +331,8 @@ input[type="radio"]:checked + .calendarlabel  {
     border-color: #888888;
 }
 
-.calendar > table {
-    width: 50px;
-    height: 50px;
-    /*width: 80%;*/
+.calendar table {
+    width: 100%;
 }
 
 td {
@@ -259,16 +340,12 @@ td {
     border-color: black;
     padding: 30px; /* Add more padding around table cells */
     width: 60px;
-
-    
 }
 
 tr {
     align-items:first baseline;
     width: 60px;
     height: 145px;
-    
-    
 }
 th {
     width: 50px;
@@ -287,13 +364,13 @@ select option{
 }
 .normal {
     background-color: #F9FD7C;
-    
+
 }
-      
+
 .low {
     background-color: #A3FD7C;
 }
-      
+
 .important {
     background-color: #FD7C8A;
 }
@@ -303,7 +380,15 @@ select option{
 }
 
 img {
-    
     padding: 5px;
     width: 150px;
-  }
+}
+
+.button-container-calendar {
+    display: flex;
+    justify-content: left;
+}
+
+.button-container-calendar form {
+    margin-right: 10px;
+}

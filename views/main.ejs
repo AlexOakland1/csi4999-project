@@ -139,48 +139,153 @@
                         <input type="submit" value="Delete" name="submit" style="background-color:#FC6565">
                         <% } %>
                     </form>
-                    <div class="row" style="background-color:#F0F0F0">
-                        <div class="col1" style="background-color:#F0F0F0">
-                            <form id="filterplannersform" action="/filterplanners" method="post">
-                                <label for="plannerfilter">Filter by Planner:</label><br><br>
-                                <select id="plannerfilter" name="plannerid">
-                                    <option value="null">None</option>
-                                    <% planners.forEach((planner) => { %>
-                                        <option value="<%= planner.plannerid %>"><%= planner.plannername %></option>
-                                    <% }); %>
-                                </select><br><br>
-                                <input type="hidden" name="userid" value="<%= data.userid %>">
-                                <input type="hidden" name="username" value="<%= data.username %>">
-                                <input type="hidden" name="name" value="<%= data.name %>">
-                                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
-                                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
-                                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
-                                <input type="submit" value="Filter">
-                            </form>
-                        </div>
-                        <div class="col2" style="background-color:#F0F0F0">
-                            <form id="filtertypeform" action="/filterplannertype" method="post">
-                                <label for="plannerfilter">Filter by Planner Type:</label><br><br>
-                                <select id="plannerfilter" name="plannerid">
-                                    <option id="radiolabel value="null">None</option>
-                                    <option value="Normal">Normal</option>
-                                    <option value="Vacation">Vacation</option>
-                                    <option value="Birthday">Birthday</option>
-                                    <option value="Family Event">Family Event</option>
-                                    <option value="Work">Work</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="School">School</option>
-                                </select><br><br>
-                                <input type="hidden" name="userid" value="<%= data.userid %>">
-                                <input type="hidden" name="username" value="<%= data.username %>">
-                                <input type="hidden" name="name" value="<%= data.name %>">
-                                <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
-                                <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
-                                <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
-                                <input type="submit" value="Filter">
-                            </form>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div class="calendar-frame-mobile" style="background-color:#F0F0F0">
+            <h2>Calendar -
+                <%= firstDate ? firstDate.toLocaleString('default', { month: 'long', year: 'numeric' }) : '' %>
+            </h2>
+            <div style="background-color:#F0F0F0">
+                <form action="/month" method="post" style="background-color:#F0F0F0">
+                    <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
+                    <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
+                    <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
+                    <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
+                    <input type="hidden" name="planners" value="<%= JSON.stringify(planners) %>">
+                    <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
+                    <select name="month">
+                        <option value="0" <% if (currentMonth === 0) { %>selected<% } %>>January</option>
+                        <option value="1" <% if (currentMonth === 1) { %>selected<% } %>>February</option>
+                        <option value="2" <% if (currentMonth === 2) { %>selected<% } %>>March</option>
+                        <option value="3" <% if (currentMonth === 3) { %>selected<% } %>>April</option>
+                        <option value="4" <% if (currentMonth === 4) { %>selected<% } %>>May</option>
+                        <option value="5" <% if (currentMonth === 5) { %>selected<% } %>>June</option>
+                        <option value="6" <% if (currentMonth === 6) { %>selected<% } %>>July</option>
+                        <option value="7" <% if (currentMonth === 7) { %>selected<% } %>>August</option>
+                        <option value="8" <% if (currentMonth === 8) { %>selected<% } %>>September</option>
+                        <option value="9" <% if (currentMonth === 9) { %>selected<% } %>>October</option>
+                        <option value="10" <% if (currentMonth === 10) { %>selected<% } %>>November</option>
+                        <option value="11" <% if (currentMonth === 11) { %>selected<% } %>>December</option>
+                    </select>
+                    <select name="year">
+                        <option value="<%= currentYear - 3 %>"><%= currentYear + 1897 %></option>
+                        <option value="<%= currentYear - 2 %>"><%= currentYear + 1898 %></option>
+                        <option value="<%= currentYear - 1 %>"><%= currentYear + 1899 %></option>
+                        <option value="<%= currentYear %>" selected><%= currentYear + 1900 %></option>
+                        <option value="<%= currentYear + 1 %>"><%= currentYear + 1901 %></option>
+                        <option value="<%= currentYear + 2 %>"><%= currentYear + 1902 %></option>
+                        <option value="<%= currentYear + 3 %>"><%= currentYear + 1903 %></option>
+                    </select>
+                    <input type="hidden" name="year" value="<%= currentYear %>">
+                    <button type="submit">Go</button>
+                </form>
+                <div class="button-container-calendar-mobile" style="background-color:#F0F0F0">
+                    <form action="/prevmonth" method="post" style="background-color:#F0F0F0">
+                        <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
+                        <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
+                        <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
+                        <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
+                        <input type="hidden" name="planners" value="<%= JSON.stringify(planners) %>">
+                        <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
+                        <input type="hidden" name="month" value="<%= currentMonth %>">
+                        <input type="hidden" name="year" value="<%= currentYear %>">
+                        <button type="submit">Previous Month</button>
+                    </form>
+                    <form action="/nextmonth" method="post">
+                        <input type="hidden" name="data" value="<%= JSON.stringify(data) %>">
+                        <input type="hidden" name="events" value="<%= JSON.stringify(events) %>">
+                        <input type="hidden" name="members" value="<%= JSON.stringify(members) %>">
+                        <input type="hidden" name="fullevents" value="<%= JSON.stringify(fullevents) %>">
+                        <input type="hidden" name="planners" value="<%= JSON.stringify(planners) %>">
+                        <input type="hidden" name="subuser" value="<%= JSON.stringify(subuser) %>">
+                        <input type="hidden" name="month" value="<%= currentMonth %>">
+                        <input type="hidden" name="year" value="<%= currentYear %>">
+                        <button type="submit" style="margin-left: 10px;">Next Month</button>
+                    </form>
+                </div>
+            </div>
+                <div class="calendar-mobile" style="background-color:#F0F0F0">
+                    <form id="calendarforum2" action="/selecteventquery" method="post" style="background-color:#F0F0F0">
+                        <% let firstShown = null; %>
+                        <% calendarData.forEach(week => { %>
+                                <% week.forEach(day => { %>
+                                    <% let eventExists = false; %>
+                                    <% if (day) { %>
+                                        <% events.forEach((event, index) => { %>
+                                            <% if (event.eventdatetime.getDate() === day.getDate() && event.eventdatetime.getMonth() === day.getMonth() && event.eventdatetime.getFullYear() === day.getFullYear()) { %>
+                                                <% eventExists = true; %>
+                                                <% if (firstShown === null) { %>
+                                                    <% firstShown = event; %>
+                                                <% } %>
+                                                <div style="background-color:#F0F0F0">
+                                                    <p1><%= day ? day.toLocaleString('default', {dateStyle: 'medium'}) : '' %>:</p1><br>
+                                                    <input type="radio" id="calendar2_<%= event.eventid %>" name="editid" value="<%= event.eventid %>" <% if (event === firstShown) { %>checked<% } %>>
+                                                    <label for="calendar2_<%= event.eventid %>" class="calendarlabel"><%= event.eventname %></label>
+                                                </div>
+                                            <% } %>
+                                        <% }) %>
+                                    <% } %>
+                                <% }) %>
+                        <% }) %>
+                        <% if (firstShown === null) { %>
+                            <p>No events found for this month.</p>
+                        <% } %>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                        <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                        <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <br/>
+                        <% if (subuser.subusertype !== "Friend") { %>
+                        <input type="submit" value="Edit" name="submit" class="pad" style="background-color:#7C87FD">
+                        <% } %>
+                        <% if (subuser.subusertype === "Adult") { %>
+                        <input type="submit" value="Delete" name="submit" style="background-color:#FC6565">
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+            <div class="row" style="background-color:#F0F0F0">
+                <div class="col1" style="background-color:#F0F0F0">
+                    <form id="filterplannersform" action="/filterplanners" method="post">
+                        <label for="plannerfilter">Filter by Planner:</label><br><br>
+                        <select id="plannerfilter" name="plannerid">
+                            <option value="null">None</option>
+                            <% planners.forEach((planner) => { %>
+                                <option value="<%= planner.plannerid %>"><%= planner.plannername %></option>
+                            <% }); %>
+                        </select><br><br>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                        <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                        <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <input type="submit" value="Filter">
+                    </form><br>
+                </div>
+                <div class="col2" style="background-color:#F0F0F0">
+                    <form id="filtertypeform" action="/filterplannertype" method="post">
+                        <label for="plannerfilter">Filter by Planner Type:</label><br><br>
+                        <select id="plannerfilter" name="plannerid">
+                            <option id="radiolabel value="null">None</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Vacation">Vacation</option>
+                            <option value="Birthday">Birthday</option>
+                            <option value="Family Event">Family Event</option>
+                            <option value="Work">Work</option>
+                            <option value="Sports">Sports</option>
+                            <option value="School">School</option>
+                        </select><br><br>
+                        <input type="hidden" name="userid" value="<%= data.userid %>">
+                        <input type="hidden" name="username" value="<%= data.username %>">
+                        <input type="hidden" name="name" value="<%= data.name %>">
+                        <input type="hidden" name="subuserid" value="<%= subuser.subuserid %>">
+                        <input type="hidden" name="subusername" value="<%= subuser.subusername %>">
+                        <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
+                        <input type="submit" value="Filter">
+                    </form>
                 </div>
             </div>
             <div class="row" style="background-color:#F0F0F0">
@@ -207,8 +312,8 @@
                         <input type="hidden" name="subusertype" value="<%= subuser.subusertype %>">
                         <button type="submit">Edit/Delete Member</button>
                     </form>
-                    </div>
                     <% } %>
+                    </div>
                     <div class="button-container" style="background-color:#F0F0F0">
                     <% if (subuser.subusertype !== "Friend") { %>
                     <form action="/addentry" method="post">
