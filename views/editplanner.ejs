@@ -35,6 +35,7 @@
                         <% allEvents.forEach((item) => { %>
                             <input type="checkbox" id="person_<%= item.eventid %>" name="event[]" value="<%= item.eventid %>" <% if(selectedEvents.includes(item.eventid)) { %> checked <% } %>>
                             <label for="person_<%= item.eventid %>"> <%= item.eventname %> </label>
+                            <br>
                         <% }); %>
                     </div>
                 </div>

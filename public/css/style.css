@@ -100,15 +100,18 @@ textarea {
     padding: 5px;
     font-family: "Noto Sans", Noto, sans-serif;
     font-size: 13px;
+    color: black;
 }
 input[type="time"] {
     text-align: center;
+    color: black;
 }
 input[type="checkbox"] {
     outline: 2px solid black;
     box-sizing: border-box;
     border-radius: 1px;
     padding: 5px;
+    color: black;
 }
 input[type="submit"] {
     min-width: 150px;
@@ -121,6 +124,7 @@ input[type="submit"] {
     border-style: outset;
     border-color: #dddddd;
     border-width: 2px;
+    color: black;
 }
 button {
     display: inline-block;
@@ -136,6 +140,7 @@ button {
     border-color: #dddddd;
     border-width: 2px;
     font-size: 13px;
+    color: black;
 }
 select {
     width: 150px;

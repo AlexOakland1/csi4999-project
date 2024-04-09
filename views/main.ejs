@@ -269,7 +269,7 @@
                     <form id="filtertypeform" action="/filterplannertype" method="post">
                         <label for="plannerfilter">Filter by Planner Type:</label><br><br>
                         <select id="plannerfilter" name="plannerid">
-                            <option id="radiolabel value="null">None</option>
+                            <option id="radiolabel" value="null">None</option>
                             <option value="Normal">Normal</option>
                             <option value="Vacation">Vacation</option>
                             <option value="Birthday">Birthday</option>
@@ -347,6 +347,7 @@
                     <br><br>
                     </div>
                     <form action="/selectplannerquery" method="post">
+                        <label>Select Planner:</label><br><br>
                         <select name="planners">
                             <% planners.forEach(planner => { %>
                             <option value="<%= planner.plannerid %>"><%= planner.plannername %></option>
